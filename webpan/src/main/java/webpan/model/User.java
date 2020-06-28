@@ -7,6 +7,7 @@ public class User {
 	private int UserUseage;
 	private int UserStorage;
 	private String UserKey;
+	private String UserEmail;
 	
 	public int getUserID() {
 		return UserID;
@@ -43,6 +44,12 @@ public class User {
 	}
 	public void setUserKey(String userKey) {
 		UserKey = userKey;
+	}
+	public String getUserEmail() {
+		return UserEmail;
+	}
+	public void setUserEmail(String userEmail) {
+		UserEmail = userEmail;
 	}
 	
 }
