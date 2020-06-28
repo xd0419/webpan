@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="webpan.dao.UserDao">
+	<resultMap type="webpan.model.User" id="UserMap">
+		<id column="user_id" property="UserId" jdbcType="INTEGER"/>
+		<result column="user_name" property="UserName" jdbcType="VARCHAR"/>
+		<result column="user_passwd" property="UserPass" jdbcType="VARCHAR"/>
+		<result column="user_email" property="UserEmail" jdbcType="VARCHAR"/>
+		<result column="user_usage" property="UserUsage" jdbcType="INTEGER"/>
+		<result column="user_storage" property="UserStorage" jdbcType="DOUBLE"/>
+		<result column="user_key" property="UserKey" jdbcType="VARCHAR"/>
+	</resultMap>
+	<insert id="register" parameterType="java.lang.String">
+		insert into user_info (user_name,user_passwd,user_email,user_key)
+		value
+		(#{UserName},#{Password},#{UserEmail},#{UserKey})
+	</insert>
+</mapper>
