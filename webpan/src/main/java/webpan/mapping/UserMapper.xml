@@ -39,4 +39,9 @@
 		value
 		(#{ApplySize},0,#{UserName},"")
 	</insert>
+	<select id="CheckName" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(*)
+		from user_info
+		where user_name = #{UserName}
+	</select>
 </mapper>

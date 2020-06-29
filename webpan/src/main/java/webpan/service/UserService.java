@@ -9,5 +9,5 @@ public interface UserService {
 	public User login(String name,String pass);
 	public User GetUserbyid(int id);
 	public int apply(String apply, String username);
-	
+	public int CheckName(String UserName);
 }

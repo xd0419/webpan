@@ -9,5 +9,5 @@ public interface UserDao {
 	public User login(@Param("User")String User,@Param("UserPass")String Password);
 	public User GetUserbyid(@Param("Id")int id);
 	public int apply(@Param("ApplySize")String ApplySize, @Param("UserName")String UserName);
-	
+	public int CheckName(@Param("UserName")String UserName);
 }

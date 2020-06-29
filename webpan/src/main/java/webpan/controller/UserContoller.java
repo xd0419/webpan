@@ -53,6 +53,18 @@ public class UserContoller
 		String UserName = request.getParameter("UserName");
 		String Pass = request.getParameter("UserPass");
 		String Email = request.getParameter("UserEmail");
+		int CheckName = uservice.CheckName(UserName);
+		if (!Email.matches("[\\w\\.\\-]+@([\\w\\-]+\\.)+[\\w\\-]+")) 
+		{
+			return "emailfalse";
+		}
+		else if( CheckName != 0) {
+			return "namerepeat";
+		}
+		else if (Pass == "")
+		{
+			return "passflase";
+		}
 		int result = uservice.register(Pass,UserName,Email);
 		if(result==1) {
 			return "true";
@@ -137,6 +149,7 @@ public class UserContoller
 		}
 		return "false";
 	}
+	
 	
 	
 }

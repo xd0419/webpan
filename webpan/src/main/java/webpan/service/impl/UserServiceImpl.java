@@ -44,5 +44,10 @@ public class UserServiceImpl implements UserService
 	public int apply(String apply, String username) {
 		return ud.apply(apply,username);
 	}
+	public int CheckName(String UserName)
+	{
+		return ud.CheckName(UserName);
+	}
+
 	
 }

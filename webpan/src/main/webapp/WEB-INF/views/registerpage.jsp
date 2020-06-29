@@ -87,20 +87,26 @@
 <script src="/webpan/vendor/bundle.js"></script>
 <script src="/webpan/vendor/feather.min.js"></script>
 <script type="application/javascript">
-	 $("#register").click(function () {
-						var id=document.getElementById("id").value;
-						var email=document.getElementById("email").value;
-						var pass=document.getElementById("pass").value;
-						var registerForm={"UserName":id,"UserEmail":email,"UserPass":pass};
-						$.post("/webpan/user/register",registerForm,function(result){
-							if(result.toString()=="true"){//注册成功
-				            	alert("Register successfully!!");
-				                window.location.href="/webpan/user/loginpage";
-				            }else{
-								alert("Register failed!!");
-				            }
-						})
-			        });
+	$("#register").click(function () {
+		var id=document.getElementById("id").value;
+		var email=document.getElementById("email").value;
+		var pass=document.getElementById("pass").value;
+		var registerForm={"UserName":id,"UserEmail":email,"UserPass":pass};
+		$.post("/webpan/user/register",registerForm,function(result){
+			if(result.toString()=="true"){//注册检查
+	        	alert("Register successfully!!");
+	            window.location.href="/webpan/user/loginpage";
+	        }else if(result.toString()=="false"){
+				alert("Register failed!!");
+	        }else if(result.toString()=="namerepeat"){
+	        	alert("Register failed!! username repeat");
+	        }else if(result.toString()=="emailfalse"){
+	        	alert("Register failed!! Email address format is not correct");
+	        }else if(result.toString()=="passflase"){
+	        	alert("Register failed!! password should not empty");
+	        }
+		})
+	});
 	
 </script>
 <!-- App scripts -->
