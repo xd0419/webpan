@@ -1,0 +1,57 @@
+html body{
+	background-color: #ffffff;
+	margin-right: 20px;
+	margin-top: 20px;
+}
+
+.upload-box {
+    text-align: center;
+    height: 250px;
+    display: none;
+    position: absolute;
+    top: 13%;
+    width: 50%;
+    padding: 20px;
+    border: 1px solid rgba(0,102,255,0.5);
+    left: 20%;
+    background-color: white;
+    border-radius: 5px;
+    z-index: 1002;
+    overflow: auto;
+}
+
+.icon{
+	position: relative;
+	top: 5px;
+}
+.search{
+	float: left;
+	width: 30%;
+}
+.notice-box {
+    color: white;
+    position: relative;
+    top: -10px;
+    float: right;
+    width: 85%;
+}
+#notice-list {
+    position: relative;
+    top: 10px;
+}
+.list-title {
+    background-color: blueviolet;
+    color: white;
+    position: relative;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 200px;
+    height: 50px;
+    font-size: 18px;
+}
+.notice-box table thead tr th, .notice-box table tbody tr td {
+    text-align: center;
+}

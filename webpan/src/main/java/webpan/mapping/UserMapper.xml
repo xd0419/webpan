@@ -21,4 +21,9 @@
 		value
 		(#{UserName},#{Password},#{UserEmail},#{UserKey})
 	</insert>
+	<select id="GetUserbyid" resultMap="UserMap" parameterType="java.lang.Integer">
+		select distinct *
+		from user_info
+		where user_id = #{Id}
+	</select>
 </mapper>

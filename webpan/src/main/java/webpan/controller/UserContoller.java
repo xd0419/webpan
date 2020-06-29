@@ -24,6 +24,7 @@ public class UserContoller
 	@Resource
 	private UserService uservice;
 	@RequestMapping("/login")
+	@ResponseBody
 	public String Login(HttpServletRequest request)
 	{
 		String name = request.getParameter("UserName");
@@ -35,7 +36,7 @@ public class UserContoller
 			session.setAttribute("ID",u.getUserID());
 			return "true";
 		}
-		return "false";		
+		return "false";
 	}
 	@RequestMapping("/loginpage")
 	public ModelAndView showLogin(HttpServletRequest request)
@@ -43,6 +44,7 @@ public class UserContoller
 		ModelAndView modelview = new ModelAndView("/loginpage");
 		return modelview;
 	}
+	
 	@RequestMapping("/register")
 	@ResponseBody
 	public String Register(HttpServletRequest request) throws NoSuchAlgorithmException
@@ -62,6 +64,63 @@ public class UserContoller
 	{
 		ModelAndView modelview = new ModelAndView("/registerpage");
 		return modelview;
+	}
+	
+	@RequestMapping("/homepage")
+	public ModelAndView showChat(HttpServletRequest request)
+	{
+		ModelAndView modelview = new ModelAndView("/homepage");
+		Object o = request.getSession().getAttribute("ID");
+		if (o != null)
+		{
+			String IDstr1 = o.toString();
+			int myid = Integer.parseInt(IDstr1);
+			User me=uservice.GetUserbyid(myid);
+			modelview.addObject("User",me);
+			return modelview;
+		}
+		else
+		{
+			return new ModelAndView("/loginpage");
+		}
+	}
+	
+	@RequestMapping("/upload")
+	public ModelAndView showUpload(HttpServletRequest request)
+	{
+		ModelAndView modelview = new ModelAndView("/upload");
+		Object o = request.getSession().getAttribute("ID");
+		if (o != null)
+		{
+			String IDstr1 = o.toString();
+			int myid = Integer.parseInt(IDstr1);
+			User me=uservice.GetUserbyid(myid);
+			modelview.addObject("User",me);
+			return modelview;
+		}
+		else
+		{
+			return new ModelAndView("/upload");
+		}
+	}
+	
+	@RequestMapping("/download")
+	public ModelAndView showDownload(HttpServletRequest request)
+	{
+		ModelAndView modelview = new ModelAndView("/download");
+		Object o = request.getSession().getAttribute("ID");
+		if (o != null)
+		{
+			String IDstr1 = o.toString();
+			int myid = Integer.parseInt(IDstr1);
+			User me=uservice.GetUserbyid(myid);
+			modelview.addObject("User",me);
+			return modelview;
+		}
+		else
+		{
+			return new ModelAndView("/download");
+		}
 	}
 	
 }

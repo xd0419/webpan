@@ -7,4 +7,5 @@ import webpan.model.User;
 public interface UserService {
 	public int register(String pass,String name,String email) throws NoSuchAlgorithmException;
 	public User login(String name,String pass);
+	public User GetUserbyid(int id);
 }

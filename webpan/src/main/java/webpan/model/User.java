@@ -4,7 +4,7 @@ public class User {
 	private int UserID;
 	private String UserName;
 	private String UserPass;
-	private int UserUseage;
+	private int UserUsage;
 	private int UserStorage;
 	private String UserKey;
 	private String UserEmail;
@@ -27,11 +27,11 @@ public class User {
 	public void setUserPass(String userPass) {
 		UserPass = userPass;
 	}
-	public int getUserUseage() {
-		return UserUseage;
+	public int getUserUsage() {
+		return UserUsage;
 	}
-	public void setUserUseage(int userUseage) {
-		UserUseage = userUseage;
+	public void setUserUsage(int userUsage) {
+		UserUsage = userUsage;
 	}
 	public int getUserStorage() {
 		return UserStorage;

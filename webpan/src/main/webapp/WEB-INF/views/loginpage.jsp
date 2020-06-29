@@ -96,7 +96,7 @@
 						$.post("/webpan/user/login",loginForm,function(result){
 							if(result=="true"){//注册成功
 				            	alert("Login successfully!!");
-				                window.location.href="/webpan/user/chatpage";
+				                window.location.href="/webpan/user/homepage";
 				            }else{
 								alert("Username(Email) or Password failed!!");
 				            }

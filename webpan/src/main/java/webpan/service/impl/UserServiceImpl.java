@@ -37,4 +37,8 @@ public class UserServiceImpl implements UserService
 		User u = ud.login(UserNameOrUserEmail, Password);
 		return u;
 	}
+	public User GetUserbyid(int id) 
+	{
+		return ud.GetUserbyid(id);
+	}
 }
