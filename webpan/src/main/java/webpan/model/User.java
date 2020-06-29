@@ -4,10 +4,11 @@ public class User {
 	private int UserID;
 	private String UserName;
 	private String UserPass;
-	private int UserUsage;
-	private int UserStorage;
+	private double UserUsage;
+	private double UserStorage;
 	private String UserKey;
 	private String UserEmail;
+	private String UserType;
 	
 	public int getUserID() {
 		return UserID;
@@ -27,16 +28,16 @@ public class User {
 	public void setUserPass(String userPass) {
 		UserPass = userPass;
 	}
-	public int getUserUsage() {
+	public double getUserUsage() {
 		return UserUsage;
 	}
-	public void setUserUsage(int userUsage) {
+	public void setUserUsage(double userUsage) {
 		UserUsage = userUsage;
 	}
-	public int getUserStorage() {
+	public double getUserStorage() {
 		return UserStorage;
 	}
-	public void setUserStorage(int userStorage) {
+	public void setUserStorage(double userStorage) {
 		UserStorage = userStorage;
 	}
 	public String getUserKey() {
@@ -51,5 +52,12 @@ public class User {
 	public void setUserEmail(String userEmail) {
 		UserEmail = userEmail;
 	}
+	public String getUserType() {
+		return UserType;
+	}
+	public void setUserType(String userType) {
+		UserType = userType;
+	}
+	
 	
 }

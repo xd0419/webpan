@@ -6,9 +6,10 @@
 		<result column="user_name" property="UserName" jdbcType="VARCHAR"/>
 		<result column="user_passwd" property="UserPass" jdbcType="VARCHAR"/>
 		<result column="user_email" property="UserEmail" jdbcType="VARCHAR"/>
-		<result column="user_usage" property="UserUsage" jdbcType="INTEGER"/>
+		<result column="user_usage" property="UserUsage" jdbcType="DOUBLE"/>
 		<result column="user_storage" property="UserStorage" jdbcType="DOUBLE"/>
 		<result column="user_key" property="UserKey" jdbcType="VARCHAR"/>
+		<result column="user_type" property="UserType" jdbcType="VARCHAR"/>
 	</resultMap>
 	<select id="login" resultMap="UserMap" parameterType="java.lang.String">
 		select distinct *
@@ -17,9 +18,9 @@
 		or user_email = #{User} and user_passwd = #{UserPass}
 	</select>
 	<insert id="register" parameterType="java.lang.String">
-		insert into user_info (user_name,user_passwd,user_email,user_key)
+		insert into user_info (user_name,user_passwd,user_email,user_key,user_usage,user_storage,user_type)
 		value
-		(#{UserName},#{Password},#{UserEmail},#{UserKey})
+		(#{UserName},#{Password},#{UserEmail},#{UserKey},0.0,10.0,'user')
 	</insert>
 	<select id="GetUserbyid" resultMap="UserMap" parameterType="java.lang.Integer">
 		select distinct *
