@@ -123,4 +123,20 @@ public class UserContoller
 		}
 	}
 	
+	@RequestMapping("/apply")
+	@ResponseBody
+	public String Apply(HttpServletRequest request)
+	{
+		String applyStr = request.getParameter("ApplySize");
+		String username = request.getParameter("UserName");
+		int apply = Integer.parseInt(applyStr);
+		int result = uservice.apply(applyStr, username);
+		if(result == 1)
+		{
+			return "true";
+		}
+		return "false";
+	}
+	
+	
 }

@@ -11,6 +11,13 @@
 		<result column="user_key" property="UserKey" jdbcType="VARCHAR"/>
 		<result column="user_type" property="UserType" jdbcType="VARCHAR"/>
 	</resultMap>
+	<resultMap type="webpan.model.Apply" id="ApplyMap">
+		<id column="apply_id" property="ApplyID" jdbcType="INTEGER"/>
+		<result column="apply_size" property="ApplySize" jdbcType="INTEGER"/>
+		<result column="apply_status" property="ApplyStatus" jdbcType="BOOLEAN"/>
+		<result column="apply_user" property="ApplyUser" jdbcType="VARCHAR"/>
+		<result column="apply_manager" property="ApplyManager" jdbcType="VARCHAR"/>
+	</resultMap>
 	<select id="login" resultMap="UserMap" parameterType="java.lang.String">
 		select distinct *
 		from user_info
@@ -27,4 +34,9 @@
 		from user_info
 		where user_id = #{Id}
 	</select>
+	<insert id="apply" parameterType="java.lang.String">
+		insert into apply_info (apply_size,apply_status,apply_user,apply_manager)
+		value
+		(#{ApplySize},0,#{UserName},"")
+	</insert>
 </mapper>

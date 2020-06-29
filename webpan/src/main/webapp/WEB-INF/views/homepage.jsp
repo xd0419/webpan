@@ -64,7 +64,7 @@
 			</div>
 		</div>
 		
-		<br /><br />
+		<br /> <br />
 		<h3>
 			Hi, ${User.getUserName()}!&nbsp;&nbsp;&nbsp;
 			<a href="manager_user.jsp" style="font-size: 15px;text-decoration:underline;">点击进入管理员界面</a>
@@ -91,7 +91,7 @@
 					document.getElementById('fade').style.display='none'" style="float: right;">
 					取消
 				</a>
-				<form action="" method="post" class="bs-example bs-example-form" role="form">
+				
 					<div style="width:300px;text-align:left">
 						<h4>申请扩容</h4>
 						<hr style="border:0.5px solid black;" />
@@ -99,14 +99,12 @@
 					<br />
 					<div class="input-group" style="width:80%;float:left;">
 						<span class="input-group-addon">申请大小</span>
-						<input type="text" name="points_now" class="form-control title">
+						<input type="text" required autofocus id="applySize" class="form-control title">
 					</div>
 					<span style="float: left;font-size: 20px;">&nbsp;&nbsp;M</span>
-					<br />
-					<br />
-					<br />
-					<button type="submit" class="btn btn-danger" style="width:100px">确定</button>
-				</form>
+					<br /> <br /> <br />
+					<button id="apply" class="btn btn-danger" style="width:100px">确定</button>
+				
 			</div>
 		</div>
 		<!--
@@ -154,5 +152,28 @@
 			</tbody>
 		</table>
 	</div>
+	
+	<!-- Bundle -->
+	<script src="https://www.jq22.com/jquery/jquery-3.3.1.js"></script>
+	<script src="/webpan/vendor/bundle.js"></script>
+	<script src="/webpan/vendor/feather.min.js"></script>
+	<script type="application/javascript">
+	 $("#apply").click(function () {
+			var applySize=document.getElementById("applySize").value;
+			var userName="${User.getUserName()}";
+			var applyForm = {"ApplySize":applySize, "UserName":userName};
+			$.post("/webpan/user/apply",applyForm,function(result){
+				if(result.toString()=="true"){//申请成功
+	            	alert("Apply successfully!!");
+	            }else{
+					alert("Apply Failed, try again?");
+	            }
+			})
+        });
+
+	</script>
+	<!-- App scripts -->
+	<script src="/webpan/dist/js/app.min.js"></script>
+	
 </body>
 </html>
