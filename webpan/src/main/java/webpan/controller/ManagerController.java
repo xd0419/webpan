@@ -9,7 +9,7 @@ import webpan.service.ManagerService;
 import webpan.service.UserService;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/manager")
 public class ManagerController 
 {
 	@Resource
