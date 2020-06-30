@@ -4,13 +4,20 @@ import java.util.Date;
 
 public class File 
 {
+	private int FileID;
 	private String FileName;
 	private String FileType;
 	private double FileSize;
-	private Date FileUpdateTime;
+	private Date FileUploadTime;
 	private int FileOwner;
 	private String FileHash;
 	private String FilePath;
+	public int getFileID() {
+		return FileID;
+	}
+	public void setFileID(int fileID) {
+		FileID = fileID;
+	}
 	public String getFileName() {
 		return FileName;
 	}
@@ -29,11 +36,11 @@ public class File
 	public void setFileSize(double fileSize) {
 		FileSize = fileSize;
 	}
-	public Date getFileUpdateTime() {
-		return FileUpdateTime;
+	public Date getFileUploadTime() {
+		return FileUploadTime;
 	}
-	public void setFileUpdateTime(Date fileUpdateTime) {
-		FileUpdateTime = fileUpdateTime;
+	public void setFileUpdateTime(Date fileUploadTime) {
+		FileUploadTime = fileUploadTime;
 	}
 	public int getFileOwner() {
 		return FileOwner;
