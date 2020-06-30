@@ -1,7 +1,10 @@
 package webpan.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
+import webpan.model.File;
 import webpan.model.User;
 
 public interface UserDao {
@@ -10,4 +13,6 @@ public interface UserDao {
 	public User GetUserbyid(@Param("Id")int id);
 	public int apply(@Param("ApplySize")String ApplySize, @Param("UserName")String UserName);
 	public int CheckName(@Param("UserName")String UserName);
+	public List<File> getFilebyid(@Param("Id")int id);
+	
 }

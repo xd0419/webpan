@@ -18,6 +18,16 @@
 		<result column="apply_user" property="ApplyUser" jdbcType="VARCHAR"/>
 		<result column="apply_manager" property="ApplyManager" jdbcType="VARCHAR"/>
 	</resultMap>
+	<resultMap type="webpan.model.File" id="FileMap">
+		<id column="file_id" property="FileID" jdbcType="INTEGER"/>
+		<result column="file_name" property="FileName" jdbcType="VARCHAR"/>
+		<result column="file_type" property="FileType" jdbcType="VARCHAR"/>
+		<result column="file_size" property="FileSize" jdbcType="DOUBLE"/>
+		<result column="file_upload_time" property="FileUploadTime" jdbcType="DATE"/>
+		<result column="file_owner" property="FileOwner" jdbcType="INTEGER"/>
+		<result column="file_hash" property="FileHash" jdbcType="VARCHAR"/>
+		<result column="file_path" property="FilePath" jdbcType="VARCHAR"/>
+	</resultMap>
 	<select id="login" resultMap="UserMap" parameterType="java.lang.String">
 		select distinct *
 		from user_info
@@ -33,6 +43,11 @@
 		select distinct *
 		from user_info
 		where user_id = #{Id}
+	</select>
+	<select id="getFilebyid" resultMap="FileMap">
+		select *
+		from file_info
+		where file_owner = #{Id}
 	</select>
 	<insert id="apply" parameterType="java.lang.String">
 		insert into apply_info (apply_size,apply_status,apply_user,apply_manager)

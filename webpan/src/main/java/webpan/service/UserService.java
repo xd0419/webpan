@@ -1,7 +1,9 @@
 package webpan.service;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
+import webpan.model.File;
 import webpan.model.User;
 
 public interface UserService {
@@ -10,4 +12,5 @@ public interface UserService {
 	public User GetUserbyid(int id);
 	public int apply(String apply, String username);
 	public int CheckName(String UserName);
+	public List<File> GetFilebyid(int id);
 }

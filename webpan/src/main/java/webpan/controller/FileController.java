@@ -57,7 +57,19 @@ public class FileController
 	public ModelAndView showupload(HttpServletRequest request)
 	{
 		ModelAndView modelview = new ModelAndView("/upload");
-		return modelview;
+		Object o = request.getSession().getAttribute("ID");
+		if (o != null)
+		{
+			String IDstr1 = o.toString();
+			int myid = Integer.parseInt(IDstr1);
+			User me=uservice.GetUserbyid(myid);
+			modelview.addObject("User",me);
+			return modelview;
+		}
+		else
+		{
+			return new ModelAndView("/upload");
+		}
 	}
 	
 	@RequestMapping("/delete")

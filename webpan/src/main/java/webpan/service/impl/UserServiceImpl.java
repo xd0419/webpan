@@ -3,6 +3,7 @@ package webpan.service.impl;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.crypto.KeyGenerator;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import webpan.dao.UserDao;
+import webpan.model.File;
 import webpan.model.User;
 import webpan.service.UserService;
 @Transactional
@@ -48,6 +50,10 @@ public class UserServiceImpl implements UserService
 	{
 		return ud.CheckName(UserName);
 	}
-
+	public List<File> GetFilebyid(int id) 
+	{
+		List<File> f = ud.getFilebyid(id);
+		return f;
+	}
 	
 }

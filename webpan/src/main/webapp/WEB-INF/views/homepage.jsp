@@ -14,7 +14,7 @@
 	<div class="container" id="side-box" style="width: 10%; float: left;">
 		<ul class="nav nav-pills nav-stacked">
 			<li class="active"><a href="/webpan/user/homepage">文件列表</a></li>
-			<li><a href="/webpan/user/upload">上传列表</a></li>
+			<li><a href="/webpan/file/uploadpage">上传列表</a></li>
 			<li><a href="/webpan/user/download">下载列表</a></li>
 		</ul>
 	</div>
@@ -123,7 +123,7 @@
 			<tbody>
 				<c:forEach items="${fileList}" var="f" varStatus="idxStatus">
 					<tr style="color: #000000;">
-						<td style="text-align:center;vertical-align:middle;">${idxStatus.index}||${f.getFileID()}</td>
+						<td style="text-align:center;vertical-align:middle;">${idxStatus.index + 1 }</td>
 						<td>
 							<span style="font-size:25px;">${f.getFileName()}</span><br/>
 							<span style="font-size:10px;color:blue">${f.getFileSize()}M</span>

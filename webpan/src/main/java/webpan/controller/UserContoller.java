@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import webpan.model.File;
 import webpan.model.User;
 import webpan.service.UserService;
 
@@ -79,7 +80,7 @@ public class UserContoller
 	}
 	
 	@RequestMapping("/homepage")
-	public ModelAndView showChat(HttpServletRequest request)
+	public ModelAndView showHome(HttpServletRequest request)
 	{
 		ModelAndView modelview = new ModelAndView("/homepage");
 		Object o = request.getSession().getAttribute("ID");
@@ -88,7 +89,9 @@ public class UserContoller
 			String IDstr1 = o.toString();
 			int myid = Integer.parseInt(IDstr1);
 			User me=uservice.GetUserbyid(myid);
+			List<File> file=uservice.GetFilebyid(myid);
 			modelview.addObject("User",me);
+			modelview.addObject("fileList",file);
 			return modelview;
 		}
 		else
@@ -97,24 +100,6 @@ public class UserContoller
 		}
 	}
 	
-	@RequestMapping("/upload")
-	public ModelAndView showUpload(HttpServletRequest request)
-	{
-		ModelAndView modelview = new ModelAndView("/upload");
-		Object o = request.getSession().getAttribute("ID");
-		if (o != null)
-		{
-			String IDstr1 = o.toString();
-			int myid = Integer.parseInt(IDstr1);
-			User me=uservice.GetUserbyid(myid);
-			modelview.addObject("User",me);
-			return modelview;
-		}
-		else
-		{
-			return new ModelAndView("/upload");
-		}
-	}
 	
 	@RequestMapping("/download")
 	public ModelAndView showDownload(HttpServletRequest request)
