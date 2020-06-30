@@ -35,33 +35,33 @@
 				</button>
 			</a>
 			<div id="id-upload-box" class="upload-box">
-				<a href="javascript:void(0)" onclick="document.getElementById('id-upload-box').style.display='none';
-					document.getElementById('fade').style.display='none'" style="float: right;">
-					取消
-				</a>
-
-				<div style="width:300px;text-align:left">
-					<h4>选择要上传的文件</h4>
-					<hr style="border:0.5px solid black;" />
-				</div>
-				<br />
-				<div class="form-group">
-				   <div class="col-sm-4 control-label">选择文件</div>
-				   <div class="col-sm-6">
-				       <div class="input-group">
-				       <input id='location' class="form-control" onclick="$('#i-file').click();">
-				           <label class="input-group-btn">
-				               <input type="button" id="i-check" value="浏览文件" class="btn btn-primary" onclick="$('#i-file').click();">
-				           </label>
-				       </div>
-				   </div>
-				   <input type="file" name="file" id='i-file'  accept=".*" onchange="$('#location').val($('#i-file').val());" style="display: none">
-				</div>
-				<br />
-				<br />
-				<button id="uploadfile" class="btn btn-danger" style="width:100px">上传</button>
-				
+			<a href="javascript:void(0)" onclick="document.getElementById('id-upload-box').style.display='none';
+				document.getElementById('fade').style.display='none'" style="float: right;">
+				取消
+			</a>
+			<div style="width:300px;text-align:left">
+				<h4>选择要上传的文件</h4>
+				<hr style="border:0.5px solid black;" />
 			</div>
+			<br />
+			<form id="uploadform" enctype="multipart/form-data" method="post">
+			<div class="form-group">
+			   <div class="col-sm-4 control-label">选择文件</div>
+			   <div class="col-sm-6">
+			       <div class="input-group">
+			       <input id='location' class="form-control" onclick="$('#i-file').click();">
+			           <label class="input-group-btn">
+			               <input type="button" id="i-check" value="浏览文件" class="btn btn-primary" onclick="$('#upload_file').click();">
+			           </label>
+			       </div>
+			   </div>
+			   <input type="file" name="upload_file" id='upload_file'  accept=".*" onchange="$('#location').val($('#upload_file').val());" style="display: none">
+			</div>
+			</form>
+			<br />
+			<br />
+			<button type="button" class="btn btn-danger" style="width:100px" id="upload">上传</button>
+		</div>
 		</div>
 		
 		<br /> <br />
@@ -157,8 +157,9 @@
 				if(result.toString()=="true"){//申请成功
 	            	alert("Apply successfully!!");
 	            }else{
-					alert("Apply Failed, try again?");
+					alert("Apply Failed, You have already applied!");
 	            }
+				location.reload();
 			})
         });
 	</script>
@@ -174,6 +175,7 @@
 	            }else{
 					alert("Upload Failed, try again?");
 	            }
+				location.reload();
 			})
         });
 	</script>
@@ -190,11 +192,35 @@
 			else{
 				alert("Try again??Fail to delete")
 			}
+			location.reload();
 		})
 	}
 	</script>
 	<!-- App scripts -->
 	<script src="/webpan/dist/js/app.min.js"></script>
+	
+	<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript">
+	$(function(){
+		$("#upload").click(function ()
+		{
+            var formdata = new FormData($('#uploadform')[0]);
+            $.ajax({
+            	type : 'POST',
+				url : '/webpan/file/upload',
+				data : formdata,
+				cache : false,
+				processData : false,
+				contentType : false,   	
+            }).success(function(data) {
+				var result = JSON.parse(data);
+				alert(result.back);
+			}).error(function() {
+				alert("上传失败");
+			});
+		});
+	})
+	</script>
 	
 </body>
 </html>

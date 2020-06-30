@@ -126,7 +126,12 @@ public class UserContoller
 	{
 		String applyStr = request.getParameter("ApplySize");
 		String username = request.getParameter("UserName");
-		int apply = Integer.parseInt(applyStr);
+		
+		User me=uservice.GetUserbyname(username);
+		if(me.getUserMessageStatus()) {
+			return "false";
+		}
+		
 		int result = uservice.apply(applyStr, username);
 		if(result == 1)
 		{

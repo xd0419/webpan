@@ -41,11 +41,65 @@ public class ManagerController
 		return modelview;
 	}
 	
+	@RequestMapping("/setStorage")
+	@ResponseBody
+	public String Deletefile(HttpServletRequest request)
+	{
+		String sizeStr = request.getParameter("Size");
+		String IDStr = request.getParameter("UserId");
+		
+		double size = Double.parseDouble(sizeStr);
+		int ID = Integer.parseInt(IDStr);
+		User me=mservice.GetUserbyid(ID);
+
+		if(size < me.getUserUsage())
+			return "false";
+		
+		int result = mservice.SetStorage(ID,size);
+
+		if (result != 0)
+		{
+			return "true";
+		}
+		else {
+			return "false";
+		}
+
+	}
+	
 	@RequestMapping("/agree")
 	@ResponseBody
-	public ModelAndView Agree(HttpServletRequest request) {
-		String ApplyID = request.getParameter("ApplyID");
+	public String Agree(HttpServletRequest request) {
+		String applyIDStr = request.getParameter("ApplyID");
+		String username = request.getParameter("UserName");
+		String sizeStr = request.getParameter("Size");
+		double size = Double.parseDouble(sizeStr);
+		int applyID = Integer.parseInt(applyIDStr);
 		
-		return null;
+		int result = mservice.AgreeApply(applyID,username,size);
+		if (result != 0)
+		{
+			return "true";
+		}
+		else {
+			return "false";
+		}
 	}
+	
+	@RequestMapping("/refuse")
+	@ResponseBody
+	public String Refuse(HttpServletRequest request) {
+		String applyIDStr = request.getParameter("ApplyID");
+		String username = request.getParameter("UserName");
+		int applyID = Integer.parseInt(applyIDStr);
+		int result = mservice.RefuseApply(applyID,username);
+		if (result != 0)
+		{
+			return "true";
+		}
+		else {
+			return "false";
+		}
+	}
+	
 }

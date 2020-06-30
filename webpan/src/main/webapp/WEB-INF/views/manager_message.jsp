@@ -8,9 +8,6 @@
 	<link rel="stylesheet" type="text/css" href="/webpan/dist/css/homepage.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-	<style>
-
-	</style>
 </head>
 
 <body>
@@ -66,10 +63,10 @@
 					</td>
 					<td>
 						<c:if test="${!apply.getApplyStatus()}">
-							<button class="btn btn-primary" >
+							<button class="btn btn-primary" id="agree${apply.getApplyID()}" onclick="agree('${apply.getApplyID()}','${apply.getApplyUser()}','${apply.getApplySize()}');">
 							<i class="material-icons icon" style="font-size: large;">assignment_turned_in</i>
 							同意 </button>
-							<button class="btn btn-danger" onclick="">
+							<button class="btn btn-danger" id="refuse${apply.getApplyID()}" onclick="refuse('${apply.getApplyID()}','${apply.getApplyUser()}');">
 							<i class="material-icons icon" style="font-size: large;">cancel</i>
 							拒绝</button>
 						</c:if>
@@ -84,24 +81,38 @@
 			</tbody>
 		</table>
 	</div>
+	<!-- Bundle -->
+	<script src="https://www.jq22.com/jquery/jquery-3.3.1.js"></script>
+	<script src="/webpan/vendor/bundle.js"></script>
+	<script src="/webpan/vendor/feather.min.js"></script>
 	<script type="text/javascript">
-		function agree(id) {
-			var applyID = {"ApplyID":id};
+		function agree(id,user,size) {
+			var applyID = {"ApplyID":id,"UserName":user,"Size":size};
 			$.post("/webpan/manager/agree",applyID,function(result){
-				if(result.toString() == "ture")
+				if(result.toString() == "true")
 					alert("Agree!")
 				else
 					alert("Fail to Agree!")
+				location.reload();
 			})
-			location.reload();
-		}
-		
-		function refuse() {
-			
-			location.reload();
 		}
 		
 		
 	</script>
+	<script type="text/javascript">
+		function refuse(id,user) {
+			var applyID = {"ApplyID":id,"UserName":user};
+			$.post("/webpan/manager/refuse",applyID,function(result){
+				if(result.toString() == "true")
+					alert("Refuse!")
+				else
+					alert("Fail to Refuse!")
+				location.reload();
+			})
+		}
+	</script>
+	
+	<!-- App scripts -->
+	<script src="/webpan/dist/js/app.min.js"></script>
 </body>
 </html>

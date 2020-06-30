@@ -10,6 +10,7 @@
 		<result column="user_storage" property="UserStorage" jdbcType="DOUBLE"/>
 		<result column="user_key" property="UserKey" jdbcType="VARCHAR"/>
 		<result column="user_type" property="UserType" jdbcType="VARCHAR"/>
+		<result column="user_message_status" property="UserMessageStatus" jdbcType="BOOLEAN"/>
 	</resultMap>
 	<resultMap type="webpan.model.Apply" id="ApplyMap">
 		<id column="apply_id" property="ApplyID" jdbcType="INTEGER"/>
@@ -35,25 +36,35 @@
 		or user_email = #{User} and user_passwd = #{UserPass}
 	</select>
 	<insert id="register" parameterType="java.lang.String">
-		insert into user_info (user_name,user_passwd,user_email,user_key,user_usage,user_storage,user_type)
+		insert into user_info (user_name,user_passwd,user_email,user_key,user_usage,user_storage,user_type,user_message_status)
 		value
-		(#{UserName},#{Password},#{UserEmail},#{UserKey},0.0,10.0,'user')
+		(#{UserName},#{Password},#{UserEmail},#{UserKey},0.0,10.0,'user',0)
 	</insert>
 	<select id="GetUserbyid" resultMap="UserMap" parameterType="java.lang.Integer">
 		select distinct *
 		from user_info
 		where user_id = #{Id}
 	</select>
+	<select id="GetUserbyname" resultMap="UserMap" parameterType="java.lang.String">
+		select distinct *
+		from user_info
+		where user_name = #{UserName}
+	</select>
 	<select id="getFilebyid" resultMap="FileMap">
 		select *
 		from file_info
 		where file_owner = #{Id}
 	</select>
-	<insert id="apply" parameterType="java.lang.String">
+	<insert id="applyApply" parameterType="java.lang.String">
 		insert into apply_info (apply_size,apply_status,apply_user,apply_manager)
 		value
 		(#{ApplySize},0,#{UserName},"")
 	</insert>
+	<update id="applyUser">
+		update user_info
+        set user_message_status = 1
+        where user_name = #{UserName}
+	</update>
 	<select id="CheckName" resultType="java.lang.Integer" parameterType="java.lang.String">
 		select count(*)
 		from user_info

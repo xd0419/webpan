@@ -14,7 +14,7 @@
 	<div class="container" id="side-box" style="width: 10%; float: left;">
 		<ul class="nav nav-pills nav-stacked">
 			<li><a href="/webpan/user/homepage">文件列表</a></li>
-			<li class="active"><a href="/webpan/user/upload">上传列表</a></li>
+			<li class="active"><a href="/webpan/file/uploadpage">上传列表</a></li>
 			<li><a href="/webpan/user/download">下载列表</a></li>
 		</ul>
 	</div>
@@ -41,20 +41,28 @@
 				document.getElementById('fade').style.display='none'" style="float: right;">
 				取消
 			</a>
-				<div style="width:300px;text-align:left">
-					<h4>选择要上传的文件</h4>
-					<hr style="border:0.5px solid black;" />
-				</div>
-				<br />
-				<form id="uploadform" enctype="multipart/form-data" method="post">
-				<div class="form-group">
-				   <div class="col-sm-4 control-label"></div>
-				   <input type="file" id="upload_file" name="upload_file"/>
-				</div>
-				</form>
-				<br />
-				<br />
-				<input type="button" class="btn btn-danger" style="width:100px" id="upload">上传</input>
+			<div style="width:300px;text-align:left">
+				<h4>选择要上传的文件</h4>
+				<hr style="border:0.5px solid black;" />
+			</div>
+			<br />
+			<form id="uploadform" enctype="multipart/form-data" method="post">
+			<div class="form-group">
+			   <div class="col-sm-4 control-label">选择文件</div>
+			   <div class="col-sm-6">
+			       <div class="input-group">
+			       <input id='location' class="form-control" onclick="$('#i-file').click();">
+			           <label class="input-group-btn">
+			               <input type="button" id="i-check" value="浏览文件" class="btn btn-primary" onclick="$('#upload_file').click();">
+			           </label>
+			       </div>
+			   </div>
+			   <input type="file" name="upload_file" id='upload_file'  accept=".*" onchange="$('#location').val($('#upload_file').val());" style="display: none">
+			</div>
+			</form>
+			<br />
+			<br />
+			<button type="button" class="btn btn-danger" style="width:100px" id="upload">上传</button>
 		</div>
 	</div>
 	

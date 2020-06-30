@@ -43,8 +43,12 @@ public class UserServiceImpl implements UserService
 	{
 		return ud.GetUserbyid(id);
 	}
+	public User GetUserbyname(String name) 
+	{
+		return ud.GetUserbyname(name);
+	}
 	public int apply(String apply, String username) {
-		return ud.apply(apply,username);
+		return ud.applyApply(apply,username)*ud.applyUser(apply,username);
 	}
 	public int CheckName(String UserName)
 	{

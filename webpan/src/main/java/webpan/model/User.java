@@ -9,6 +9,7 @@ public class User {
 	private String UserKey;
 	private String UserEmail;
 	private String UserType;
+	private boolean UserMessageStatus;
 	
 	public int getUserID() {
 		return UserID;
@@ -58,6 +59,11 @@ public class User {
 	public void setUserType(String userType) {
 		UserType = userType;
 	}
-	
+	public boolean getUserMessageStatus() {
+		return UserMessageStatus;
+	}
+	public void setUserMessageStatus(boolean userMessageStatus) {
+		UserMessageStatus = userMessageStatus;
+	}
 	
 }

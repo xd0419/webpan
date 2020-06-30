@@ -17,7 +17,7 @@
 	<div class="container" id="side-box" style="width: 10%; float: left;">
 		<ul class="nav nav-pills nav-stacked">
 			<li><a href="/webpan/user/homepage">文件列表</a></li>
-			<li><a href="/webpan/user/upload">上传列表</a></li>
+			<li><a href="/webpan/file/uploadpage">上传列表</a></li>
 			<li class="active"><a href="/webpan/user/download">下载列表</a></li>
 		</ul>
 	</div>
