@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="webpan.dao.FileDao">
+	<insert id="InsertFileInfo">
+		insert into file_info (file_name,file_type,file_size,file_upload_time,file_owner,file_hash,file_path)
+		value
+		(#{name},#{type},#{size},#{time},#{owner},#{hash},#{path})
+	</insert>
+	<update id="SubStorage">
+	    update user_info
+	    set user_usage = user_usage - #{size}
+	    where user_id = #{owner}
+	</update>
+	<update id="AddStorage">
+	    update user_info
+	    set user_usage = user_usage + #{size}
+	    where user_id = #{owner}
+	</update>
+	<select id = "GetSize" resultType = "java.lang.Double">
+	    select file_size
+	    from file_info
+	    where file_id = #{file_id}
+	</select>
+	<delete id="DeleteFile">
+        delete 
+        from file_info
+        where file_id = #{file_id}
+    </delete>
+</mapper>
