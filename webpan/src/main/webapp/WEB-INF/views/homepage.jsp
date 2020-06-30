@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 
 <head>
@@ -28,8 +29,7 @@
 			<a href="javascript:void(0)"
 			   onclick="document.getElementById('id-upload-box').style.display='block';
 						document.getElementById('fade').style.display='block'">
-				<button type="button" id="create-group-button" class="btn btn-primary"
-						style="float: right;">
+				<button type="button" class="btn btn-primary" style="float: right">
 					<i class="material-icons icon" style="font-size: large;">file_upload</i>
 					上传文件
 				</button>
@@ -39,37 +39,39 @@
 					document.getElementById('fade').style.display='none'" style="float: right;">
 					取消
 				</a>
-				<form action="" method="post" class="bs-example bs-example-form" role="form">
-					<div style="width:300px;text-align:left">
-						<h4>选择要上传的文件</h4>
-						<hr style="border:0.5px solid black;" />
-					</div>
-					<br />
-					<div class="form-group">
-					   <div class="col-sm-4 control-label">选择文件</div>
-					   <div class="col-sm-6">
-					       <div class="input-group">
-					       <input id='location' class="form-control" onclick="$('#i-file').click();">
-					           <label class="input-group-btn">
-					               <input type="button" id="i-check" value="浏览文件" class="btn btn-primary" onclick="$('#i-file').click();">
-					           </label>
-					       </div>
-					   </div>
-					   <input type="file" name="file" id='i-file'  accept=".*" onchange="$('#location').val($('#i-file').val());" style="display: none">
-					</div>
-					<br />
-					<br />
-					<button type="submit" class="btn btn-danger" style="width:100px">上传</button>
-				</form>
+
+				<div style="width:300px;text-align:left">
+					<h4>选择要上传的文件</h4>
+					<hr style="border:0.5px solid black;" />
+				</div>
+				<br />
+				<div class="form-group">
+				   <div class="col-sm-4 control-label">选择文件</div>
+				   <div class="col-sm-6">
+				       <div class="input-group">
+				       <input id='location' class="form-control" onclick="$('#i-file').click();">
+				           <label class="input-group-btn">
+				               <input type="button" id="i-check" value="浏览文件" class="btn btn-primary" onclick="$('#i-file').click();">
+				           </label>
+				       </div>
+				   </div>
+				   <input type="file" name="file" id='i-file'  accept=".*" onchange="$('#location').val($('#i-file').val());" style="display: none">
+				</div>
+				<br />
+				<br />
+				<button id="uploadfile" class="btn btn-danger" style="width:100px">上传</button>
+				
 			</div>
 		</div>
 		
 		<br /> <br />
 		<h3>
-			Hi, ${User.getUserName()}!&nbsp;&nbsp;&nbsp;
-			<a href="manager_user.jsp" style="font-size: 15px;text-decoration:underline;">点击进入管理员界面</a>
+			Hi, <span style="color:green;">${User.getUserName()}</span>!&nbsp;&nbsp;&nbsp;
+			<c:if test="${User.getUserType()}=='admin'}">
+			<a href="/webpan/manager/manager_user" style="font-size: 15px;text-decoration:underline;">点击进入管理员界面</a>
+			</c:if>
 		</h3>
-		
+		<br/>
 		<span style="float: left;font-size: 30px">文件列表</span>
 		<div class="progress progress-striped active" style="float: left;width: 40%;margin-left: 50px;margin-top: 10px;">
 			<div class="progress-bar progress-bar-info" role="progressbar"
@@ -112,43 +114,32 @@
 		-->
 		<table id="notice-list" class="table table-bordered">
 			<thead>
-				<tr style="color:Highlight">
-					<th style="width: 10%;">序号</th>
+				<tr style="color:Highlight;text-align:center;">
+					<th style="width: 10%;text-align:center;">序号</th>
 					<th style="width: 60%;">文件名</th>
-					<th style="width: 30%;">操作</th>
+					<th style="width: 30%;text-align:center;">操作</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr style="color: #000000;">
-					<td>1</td>
-					<td>
-						文件名<br />
-						文件大小
-					</td>
-					<td>
-						<button class="btn btn-primary" >
-							<i class="material-icons icon" style="font-size: large;">file_download</i>
-							下载 </button>
-						<button class="btn btn-danger">
-							<i class="material-icons icon" style="font-size: large;">delete_forever</i>
-							删除</button>
-					</td>
-				</tr>
-				<tr style="color: #000000;">
-					<td>2</td>
-					<td>
-						文件名<br />
-						文件大小
-					</td>
-					<td>
-						<button class="btn btn-primary" >
-							<i class="material-icons icon" style="font-size: large;">file_download</i>
-							下载 </button>
-						<button class="btn btn-danger">
-							<i class="material-icons icon" style="font-size: large;">delete_forever</i>
-							删除</button>
-					</td>
-				</tr>
+				<c:forEach items="${fileList}" var="f" varStatus="idxStatus">
+					<tr style="color: #000000;">
+						<td style="text-align:center;vertical-align:middle;">${idxStatus.index}||${f.getFileID()}</td>
+						<td>
+							<span style="font-size:25px;">${f.getFileName()}</span><br/>
+							<span style="font-size:10px;color:blue">${f.getFileSize()}M</span>
+						</td>
+						<td style="text-align:center;">
+							<button class="btn btn-primary" id="download${idxStatus.index}">
+								<i class="material-icons icon" style="font-size: large;">file_download</i>
+								下载 
+							</button>
+							<button class="btn btn-danger" onclick="file_delete(4);">
+								<i class="material-icons icon" style="font-size: large;">delete_forever</i>
+								删除
+							</button>
+						</td>
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 	</div>
@@ -170,7 +161,37 @@
 	            }
 			})
         });
-
+	</script>
+	
+	<script type="application/javascript">
+	 $("#uploadfile").click(function () {
+			var loacation=document.getElementById("i-file").value;
+			var userID="${User.getUserID()}";
+			var uploadForm = {"Location":loacation, "UserID":userID};
+			$.post("/webpan/user/uploadfile",uploadForm,function(result){
+				if(result.toString()=="true"){//申请成功
+	            	alert("Upload successfully!!");
+	            }else{
+					alert("Upload Failed, try again?");
+	            }
+			})
+        });
+	</script>
+	
+	<script>
+	function file_delete(id){
+		var username = "${User.getUserName()}";
+		var DeleteForm = {"DeleteId":id,"UserName":username};
+		$.post("/webpan/user/deletefile",DeleteForm,function(result)
+		{
+			if(result.toString()=="true"){
+				alert("Delete!!!")
+			}
+			else{
+				alert("Try again??Fail to delete")
+			}
+		})
+	}
 	</script>
 	<!-- App scripts -->
 	<script src="/webpan/dist/js/app.min.js"></script>
