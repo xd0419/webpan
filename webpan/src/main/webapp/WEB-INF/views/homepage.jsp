@@ -67,7 +67,7 @@
 		<br /> <br />
 		<h3>
 			Hi, <span style="color:green;">${User.getUserName()}</span>!&nbsp;&nbsp;&nbsp;
-			<c:if test="${User.getUserType()}=='admin'}">
+			<c:if test="${User.getUserType()=='admin'}">
 			<a href="/webpan/manager/manager_user" style="font-size: 15px;text-decoration:underline;">点击进入管理员界面</a>
 			</c:if>
 		</h3>
