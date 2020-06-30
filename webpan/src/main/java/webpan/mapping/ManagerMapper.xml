@@ -1,4 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="webpan.dao.ManagerDao">
+	<resultMap type="webpan.model.User" id="UserMap">
+		<id column="user_id" property="UserID" jdbcType="INTEGER"/>
+		<result column="user_name" property="UserName" jdbcType="VARCHAR"/>
+		<result column="user_passwd" property="UserPass" jdbcType="VARCHAR"/>
+		<result column="user_usage" property="UserUsage" jdbcType="DOUBLE"/>
+		<result column="user_storage" property="UserStorage" jdbcType="DOUBLE"/>
+		<result column="user_key" property="UserKey" jdbcType="VARCHAR"/>
+		<result column="user_email" property="UserEmail" jdbcType="VARCHAR"/>
+		<result column="user_type" property="UserType" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap type="webpan.model.Apply" id="ApplyMap">
+		<id column="apply_id" property="ApplyID" jdbcType="INTEGER"/>
+		<result column="apply_size" property="ApplySize" jdbcType="INTEGER"/>
+		<result column="apply_status" property="ApplyStatus" jdbcType="BOOLEAN"/>
+		<result column="apply_user" property="ApplyUser" jdbcType="VARCHAR"/>
+		<result column="apply_manager" property="ApplyManager" jdbcType="VARCHAR"/>
+	</resultMap>
+	<select id="getAllUsers" resultMap="UserMap">
+		select distinct *	
+		from user_info
+	</select>
+	<select id="getAllApplies" resultMap="ApplyMap">
+		select distinct *
+		from apply_info
+	</select>
+	<select id="getApplyUsers" resultMap="UserMap">
+		SELECT user_id,user_name,user_passwd,user_usage,user_storage,user_key,user_email,user_type FROM user_info, apply_info WHERE user_name = apply_user
+	</select>
 </mapper>
