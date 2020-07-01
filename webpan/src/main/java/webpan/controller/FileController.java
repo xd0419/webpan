@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import tools.EncryptAndDecrypt;
 import webpan.model.User;
 import webpan.service.FileService;
 import webpan.service.UserService;
@@ -29,7 +30,7 @@ public class FileController
 	private UserService uservice;
 	@RequestMapping("/upload")
 	@ResponseBody
-	public int UpLoad(@RequestParam("upload_file")MultipartFile file,HttpServletRequest request) throws IOException
+	public int UpLoad(@RequestParam("upload_file")MultipartFile file,HttpServletRequest request) throws Exception
 	{
 		int result = 0;
 		String name = file.getOriginalFilename();
@@ -48,8 +49,8 @@ public class FileController
 			return result;
 		}
 		fileservice.AddStorage(owner, size);
-		java.io.File uploadpath = new java.io.File(path);
-		file.transferTo(uploadpath);
+		//java.io.File uploadpath = new java.io.File(path);
+		EncryptAndDecrypt.DESEncrypt(file, path, u.getUserKey());
 		result = fileservice.InsertFileInfo(name, type, size, time, owner, hash, path);
 		return result;
 	}
