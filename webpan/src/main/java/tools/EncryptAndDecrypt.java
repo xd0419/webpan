@@ -35,7 +35,7 @@ public class EncryptAndDecrypt {
 	public static Key GetKey(String key) throws Exception
 	{
 		KeyGenerator kg = KeyGenerator.getInstance("DES");
-		SecureRandom secureRandom = new SecureRandom();
+		SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG" );
 		secureRandom.setSeed(key.getBytes());
 		kg.init(secureRandom);
 		Key des_key=kg.generateKey();
