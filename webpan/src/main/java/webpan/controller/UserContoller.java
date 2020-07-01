@@ -7,8 +7,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -68,6 +66,11 @@ public class UserContoller
 		}
 		int result = uservice.register(Pass,UserName,Email);
 		if(result==1) {
+			java.io.File file=new java.io.File("C:\\webpan\\"+UserName);
+			if(!file.exists())
+			{
+				file.mkdir();
+			}
 			return "true";
 		}
 		return "false";		

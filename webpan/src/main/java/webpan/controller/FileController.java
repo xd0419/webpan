@@ -40,15 +40,16 @@ public class FileController
 		String time = sdf.format(now);
 		int owner = Integer.parseInt(request.getSession().getAttribute("ID").toString());
 		String hash = DigestUtils.md5Hex(file.getBytes());
-		String path = "C:\\webpan\\"+String.valueOf(owner)+name;
 		User u=uservice.GetUserbyid(owner);
+		String path = "C:\\webpan\\"+u.getUserName()+"\\"+name;
 		if(u.getUserUsage()+size > u.getUserStorage())
 		{
 			result = 0;
 			return result;
 		}
 		fileservice.AddStorage(owner, size);
-		//´æÈëÎÄ¼ş¼Ğ
+		java.io.File uploadpath = new java.io.File(path);
+		file.transferTo(uploadpath);
 		result = fileservice.InsertFileInfo(name, type, size, time, owner, hash, path);
 		return result;
 	}
