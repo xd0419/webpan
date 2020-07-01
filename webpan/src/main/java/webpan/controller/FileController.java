@@ -34,7 +34,14 @@ public class FileController
 	{
 		int result = 0;
 		String name = file.getOriginalFilename();
-		String type = "doc";
+		int indexOfPoint = name.lastIndexOf('.');
+		if(indexOfPoint == -1) {
+			indexOfPoint = name.length();
+		}
+		String fileName = name.substring(0,indexOfPoint);
+		String fileType = name.substring(indexOfPoint+1);
+		
+		//String type = "doc";
 		double size = (double)file.getSize()/1000000;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date now = new Date();
@@ -51,7 +58,7 @@ public class FileController
 		fileservice.AddStorage(owner, size);
 		//java.io.File uploadpath = new java.io.File(path);
 		EncryptAndDecrypt.DESEncrypt(file, path, u.getUserKey());
-		result = fileservice.InsertFileInfo(name, type, size, time, owner, hash, path);
+		result = fileservice.InsertFileInfo(fileName, fileType, size, time, owner, hash, path);
 		return result;
 	}
 	@RequestMapping("/uploadpage")

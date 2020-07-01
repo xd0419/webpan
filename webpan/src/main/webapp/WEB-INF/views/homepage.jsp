@@ -23,7 +23,7 @@
 			<span class="input-group-addon">
 				<i class="material-icons icon" style="font-size: large;">search</i>
 			</span>
-			<input type="text" class="form-control" placeholder="search">
+			<input type="text" class="form-control" placeholder="search" id="key" onkeydown="onSearch(this)">
 		</div>
 		<div>
 			<a href="javascript:void(0)"
@@ -58,8 +58,9 @@
 			   <input type="file" name="upload_file" id='upload_file'  accept=".*" onchange="$('#location').val($('#upload_file').val());" style="display: none">
 			</div>
 			</form>
+			<br /><br />
 			<br />
-			<br />
+			
 			<button type="button" class="btn btn-danger" style="width:100px" id="upload">上传</button>
 		</div>
 		</div>
@@ -72,8 +73,8 @@
 			</c:if>
 		</h3>
 		<br/>
-		<span style="float: left;font-size: 30px">文件列表</span>
-		<div class="progress progress-striped active" style="float: left;width: 40%;margin-left: 50px;margin-top: 10px;">
+		<span style="float: left;font-size: 20px;margin-top: 5px;">网盘容量</span>
+		<div class="progress progress-striped active" style="float: left;width: 40%;margin-left: 10px;margin-top: 10px;">
 			<div class="progress-bar progress-bar-info" role="progressbar"
 				 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
 				 style="width: ${ User.getUserUsage()*100 / User.getUserStorage() }%;">
@@ -109,14 +110,28 @@
 				
 			</div>
 		</div>
-		<!--
-		<center><button class="list-title">文件列表</button></center>
-		-->
+		<br /><br /><br />
+		<div class="form-group">
+			<label for="name" style="float:left;margin-top:5px;margin-right:10px;">筛选文件</label>
+			<select id="select" onchange="selectFile()" class="form-control" style="float:left;width:15%;">
+				<option value="AllFiles">AllFiles</option>
+				<option value="Documents">Documents</option>
+				<option value="Media">Media</option>
+				<option value="CompressedFile">CompressedFile</option>
+				<option value="Picture">Picture</option>
+				<option value="System">System</option>
+				<option value="Code">Code</option>
+				<option value="Others">Others</option>
+			</select>
+		</div>
+		<button class="list-title" style="float:left;margin-left:20%">文件列表</button>
+		<br />
 		<table id="notice-list" class="table table-bordered">
 			<thead>
 				<tr style="color:Highlight;text-align:center;">
 					<th style="width: 10%;text-align:center;">序号</th>
-					<th style="width: 60%;">文件名</th>
+					<th style="width: 50%;">文件名</th>
+					<th style="width: 10%;">文件类型</th>
 					<th style="width: 30%;text-align:center;">操作</th>
 				</tr>
 			</thead>
@@ -124,16 +139,17 @@
 				<c:forEach items="${fileList}" var="f" varStatus="idxStatus">
 					<tr style="color: #000000;">
 						<td style="text-align:center;vertical-align:middle;">${idxStatus.index + 1 }</td>
-						<td>
-							<span style="font-size:25px;">${f.getFileName()}</span><br/>
+						<td style="font-size:25px;">
+							${f.getFileName()}<br/>
 							<span style="font-size:10px;color:blue">${f.getFileSize()}M</span>
 						</td>
+						<td style="text-align:center;vertical-align:middle;">${f.getFileType()}</td>
 						<td style="text-align:center;">
-							<button class="btn btn-primary" id="download${idxStatus.index}">
+							<button class="btn btn-primary" id="download${f.getFileID()}" onclick="download_file('${f.getFileName()}',${User.getUserID()});">
 								<i class="material-icons icon" style="font-size: large;">file_download</i>
 								下载 
 							</button>
-							<button class="btn btn-danger" onclick="file_delete(4);">
+							<button class="btn btn-danger" onclick="file_delete('${f.getFileName()}',${User.getUserID()});">
 								<i class="material-icons icon" style="font-size: large;">delete_forever</i>
 								删除
 							</button>
@@ -143,6 +159,66 @@
 			</tbody>
 		</table>
 	</div>
+	
+	<script type="text/javascript">
+		function selectFile() {
+			var arr = {
+				'Documents':['doc','docx','ppt','pptx','xls','xlsx','pdf','txt'],
+				'Media':['mp3','mp4','avi','wav','au','wma','amr','mmf','swf','mov','ram'],
+				'CompressedFile':['rar','zip','gz','arj','z'],
+				'Picture':['png','jpg','jpeg','gif','bmp','pic','tif'],
+				'System':['int','dll','adt','sys'],
+				'Code' : ['c','cpp','html','jsp','py','java','class','css','js','obj','msg','exe','com'],
+				'Others' : ['bak','map','tmp','dot','cmd']
+			}
+			
+			var myselect = document.getElementById("select");
+			var index=myselect.selectedIndex; 
+		    var key = myselect.options[index].value;
+			
+			var storeId = document.getElementById('notice-list');
+		    var rowsLength = storeId.rows.length;
+		    var searchCol = 2;
+			if(key=="AllFiles"){
+				for(var i=1;i<rowsLength;i++){
+				    storeId.rows[i].style.display='';
+				}
+			}else{
+				for(var i=1;i<rowsLength;i++){
+				      var searchText = storeId.rows[i].cells[searchCol].innerHTML;
+
+				      if(arr[key].includes(searchText)){
+				        storeId.rows[i].style.display='';
+				      }else{
+				        storeId.rows[i].style.display='none';//隐藏行操作
+				      }
+				 }
+			}
+		}
+	
+	</script>
+	
+	<script type="text/javascript">
+	function onSearch(obj){
+		  setTimeout(function(){
+		    var storeId = document.getElementById('notice-list');
+		    var rowsLength = storeId.rows.length;
+		    var key = obj.value;
+		    var searchCol = 1;
+		    for(var i=1;i<rowsLength;i++){
+		      var searchText = storeId.rows[i].cells[searchCol].innerHTML;
+		      var index = searchText.indexOf('<');
+		      var text = searchText.substring(8,index);
+		      if(text.match(key)){
+		        storeId.rows[i].style.display='';
+		      }else{
+		        storeId.rows[i].style.display='none';
+		      }
+		    }
+		  },200);//200为延时时间
+		}
+	
+	</script>
 	
 	<!-- Bundle -->
 	<script src="https://www.jq22.com/jquery/jquery-3.3.1.js"></script>
@@ -180,10 +256,27 @@
         });
 	</script>
 	
+	<script type="application/javascript">
+	function download_file(name,id){
+		var downloadForm = {"ID":id,"name":name};
+		$.post("/webpan/file/download",downloadForm,function(result)
+		{
+			if(result==1){
+				alert("Download Successfully!!")
+			}
+			else{
+				alert("Try again??Fail to download...")
+			}
+			location.reload();
+		})
+	}
+	</script>
+	
+	
 	<script>
-	function file_delete(id){
+	function file_delete(name,id){
 		var username = "${User.getUserName()}";
-		var DeleteForm = {"DeleteId":id,"UserName":username};
+		var DeleteForm = {"FileName":name,"UserID":id};
 		$.post("/webpan/user/deletefile",DeleteForm,function(result)
 		{
 			if(result.toString()=="true"){
@@ -221,6 +314,6 @@
 		});
 	})
 	</script>
-	
+
 </body>
 </html>

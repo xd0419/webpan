@@ -42,12 +42,12 @@ html body{
 .list-title {
     background-color: blueviolet;
     color: white;
-    position: relative;
+    display: block;
+    margin: 0 auto;
     border: none;
     border-radius: 5px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
     width: 200px;
     height: 50px;
     font-size: 18px;
