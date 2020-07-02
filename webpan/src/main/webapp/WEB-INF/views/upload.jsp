@@ -194,7 +194,6 @@
                     chunk : block.chunk,
                     chunksize : block.end - block.start
                 };
-                alert("准备发送第" + param.chunk + "个数据包");
                 // 同步校验，防止没校验完就上传了
                 $.ajaxSetup({async : false});
                 $.post(url,param,function(data){
@@ -223,7 +222,6 @@
                         uploader.upload($fileArray[count].id);
                     }
                 });
-                alert("文件发送结束了");
                 $.ajaxSetup({async : true});
             }
         });
@@ -261,10 +259,23 @@
             }
             var $li = $('<div id="' + file.id + '" class="file-item">'
                     + '<span class="info">' + file.name + '</span>'
-                    + '<span class="state">等待上传</span>'
+                    + '<span class="state">等待上传</span>' 
+                    + '<a class="stop-btn" href="javascript:;">暂停</a>' 
+                    +'<a class="remove-this" href="javascript:;">取消</a>'
                     + '</div>');
             $list.append($li);
             $fileArray.push(file);
+          //暂停上传的文件
+			$list.on('click','.stop-btn',function(){
+				uploader.stop(true);
+			})
+			//删除上传的文件
+			$list.on('click','.remove-this',function(){
+				if ($(this).parents(".file-item").attr('id') == file.id) {
+					uploader.removeFile(file);
+					$(this).parents(".file-item").remove();
+				}
+			})
         });
         
         // 对于太小的文件进行提示

@@ -95,7 +95,7 @@ public class BigFileController
 		int owner = Integer.parseInt(request.getSession().getAttribute("ID").toString());
 		User u=uservice.GetUserbyid(owner);
 		java.io.File temp_dir = new java.io.File("C:\\webpan\\"+u.getUserName()+"\\tmp\\");
-        //»ñÈ¡tmpÎÄ¼þ¼ÐÖÐËùÓÐÎÄ¼þ
+        //ï¿½ï¿½È¡tmpï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 		File[] fileArray = temp_dir.listFiles(new FileFilter() {
         	public boolean accept(File pathname) {
                 if (pathname.isDirectory()) {
@@ -107,7 +107,7 @@ public class BigFileController
         });
         List<File> fileList = new ArrayList<File>(Arrays.asList(fileArray));
         Collections.sort(fileList, new Comparator<File>() {
-            // °´ÎÄ¼þÃûÉýÐòÅÅÁÐ
+            // ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             public int compare(File o1, File o2) {
                 if (Integer.valueOf(o1.getName())< Integer.valueOf(o2.getName())) {
                     return -1;
@@ -117,11 +117,11 @@ public class BigFileController
             }
         });
         java.io.File temp_file = new java.io.File("C:\\webpan\\"+u.getUserName()+"\\tmp\\"+name);
-        /*ºÏ²¢ÎÄ¼þ²Ù×÷*/
+        /*ï¿½Ï²ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½*/
         try {
             temp_file.createNewFile();
         } catch (IOException e) {
-            System.out.println("´´½¨Ä¿±êÎÄ¼þ³ö´í£º" + e.getMessage());
+            System.out.println("ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½" + e.getMessage());
             e.printStackTrace();
         }
         FileChannel outChannel = null;
@@ -137,10 +137,10 @@ public class BigFileController
             }
             outChannel.close();
         } catch (FileNotFoundException e) {
-        	 System.out.println("ºÏ²¢·ÖÆ¬ÎÄ¼þ³ö´í£º" + e.getMessage());
+        	 System.out.println("ï¿½Ï²ï¿½ï¿½ï¿½Æ¬ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½" + e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
-        	 System.out.println("ºÏ²¢·ÖÆ¬ÎÄ¼þ³ö´í£º" + e.getMessage());
+        	 System.out.println("ï¿½Ï²ï¿½ï¿½ï¿½Æ¬ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½" + e.getMessage());
             e.printStackTrace();
         }
         String src_file = "C:\\webpan\\"+u.getUserName()+"\\tmp\\"+name;
@@ -156,7 +156,7 @@ public class BigFileController
 		String time = sdf.format(now);
 		String hash = DigestUtils.md5Hex(FiletoByte.getBytesByFile(src_file));
         result = fileservice.InsertFileInfo(fileName, fileType, size, time, owner, hash, dst_file);
-        /*ÎÄ¼þ¼ÓÃÜ²Ù×÷*/
+        /*ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ü²ï¿½ï¿½ï¿½*/
         String key = u.getUserKey();
         EncryptAndDecrypt.DESEncrypt(src_file, dst_file, key);
         temp_file.delete();
