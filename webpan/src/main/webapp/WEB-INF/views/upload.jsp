@@ -182,7 +182,6 @@
                     $nameArray.push(file.name);
                     deferred.resolve();
                 });
-                alert("文件发送前的准备已经完成");
                 return deferred.promise();
             },
             beforeSend : function(block){
@@ -195,8 +194,7 @@
                     chunk : block.chunk,
                     chunksize : block.end - block.start
                 };
-                alert("共有" + (count+1) + "个文件");
-                alert("这个文件分块已经完成，即将开始检查分块并上传至服务器");
+                alert("准备发送第" + param.chunk + "个数据包");
                 // 同步校验，防止没校验完就上传了
                 $.ajaxSetup({async : false});
                 $.post(url,param,function(data){
@@ -208,8 +206,6 @@
                     }
                 });
                 $.ajaxSetup({async : true});
-                this.owner.options.formData.fileMd5 = $md5Array[count];
-                deferred.resolve();
                 return deferred.promise();
             },
             afterSendFile : function(){
@@ -260,11 +256,9 @@
 
         // 当有文件添加进来的时候 
         uploader.on('fileQueued', function(file) {
-        	alert("文件成功添加至页面！");
             if((file.size <= $chunkSize) || (file.size > $maxSingleSize)){
                 return;
             }
-            alert("这个文件大小正合适~");
             var $li = $('<div id="' + file.id + '" class="file-item">'
                     + '<span class="info">' + file.name + '</span>'
                     + '<span class="state">等待上传</span>'
