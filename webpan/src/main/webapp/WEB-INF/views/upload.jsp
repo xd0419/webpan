@@ -190,10 +190,10 @@
                 // 每个分块上传之前校验是否已上传
                 var url = "/webpan/bigfile/check",
                 param = {
-                    fileName : $nameArray[count],
+                    filename : $nameArray[count],
                     fileMd5 : $md5Array[count],
                     chunk : block.chunk,
-                    chunkSize : block.end - block.start
+                    chunksize : block.end - block.start
                 };
                 alert("共有" + (count+1) + "个文件");
                 alert("这个文件分块已经完成，即将开始检查分块并上传至服务器");
@@ -218,7 +218,7 @@
                 // 上传前设置其它参数
                 param = {
                     fileMd5 : $md5Array[count],
-                    fileName : $nameArray[count]
+                    filename : $nameArray[count]
                 };
                 $.ajaxSetup({async : false});
                 $.post(url,param,function(data){
