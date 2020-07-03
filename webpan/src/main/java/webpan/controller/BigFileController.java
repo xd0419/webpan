@@ -95,7 +95,7 @@ public class BigFileController
 		int owner = Integer.parseInt(request.getSession().getAttribute("ID").toString());
 		User u=uservice.GetUserbyid(owner);
 		java.io.File temp_dir = new java.io.File("C:\\webpan\\"+u.getUserName()+"\\tmp\\");
-        //��ȡtmp�ļ����������ļ�
+        //筛除tmp目录中的文件夹
 		File[] fileArray = temp_dir.listFiles(new FileFilter() {
         	public boolean accept(File pathname) {
                 if (pathname.isDirectory()) {
@@ -107,7 +107,7 @@ public class BigFileController
         });
         List<File> fileList = new ArrayList<File>(Arrays.asList(fileArray));
         Collections.sort(fileList, new Comparator<File>() {
-            // ���ļ�����������
+            // 将文件排序
             public int compare(File o1, File o2) {
                 if (Integer.valueOf(o1.getName())< Integer.valueOf(o2.getName())) {
                     return -1;
@@ -117,11 +117,11 @@ public class BigFileController
             }
         });
         java.io.File temp_file = new java.io.File("C:\\webpan\\"+u.getUserName()+"\\tmp\\"+name);
-        /*�ϲ��ļ�����*/
+        //合并文件
         try {
             temp_file.createNewFile();
         } catch (IOException e) {
-            System.out.println("����Ŀ���ļ�����" + e.getMessage());
+            System.out.println("合并文件出错" + e.getMessage());
             e.printStackTrace();
         }
         FileChannel outChannel = null;
@@ -137,12 +137,13 @@ public class BigFileController
             }
             outChannel.close();
         } catch (FileNotFoundException e) {
-        	 System.out.println("�ϲ���Ƭ�ļ�����" + e.getMessage());
+        	 System.out.println("合并文件出错" + e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
-        	 System.out.println("�ϲ���Ƭ�ļ�����" + e.getMessage());
+        	 System.out.println("合并文件出错" + e.getMessage());
             e.printStackTrace();
         }
+        /*执行数据库操作*/
         String src_file = "C:\\webpan\\"+u.getUserName()+"\\tmp\\"+name;
         String dst_file = "C:\\webpan\\"+u.getUserName()+"\\"+name;
         double size = (double)temp_file.length()/1000000;
@@ -156,7 +157,8 @@ public class BigFileController
 		String time = sdf.format(now);
 		String hash = DigestUtils.md5Hex(FiletoByte.getBytesByFile(src_file));
         result = fileservice.InsertFileInfo(fileName, fileType, size, time, owner, hash, dst_file);
-        /*�ļ����ܲ���*/
+        fileservice.AddStorage(owner, size);
+        /*加密文件*/
         String key = u.getUserKey();
         EncryptAndDecrypt.DESEncrypt(src_file, dst_file, key);
         temp_file.delete();
