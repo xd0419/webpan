@@ -43,11 +43,14 @@ public class ManagerServiceImpl implements ManagerService
 		return mDao.GetUserbyid(id);
 	}
 
-	public int AgreeApply(int applyID,String userName,double size) {
-		return mDao.agreeApply(applyID,userName,size)*mDao.agreeUser(applyID,userName,size);
+	public int AgreeApply(int applyID,String userName,double size,String manager) {
+		return mDao.agreeApply(applyID,userName,size,manager)*mDao.agreeUser(applyID,userName,size);
 	}
 
-	public int RefuseApply(int applyID,String userName) {
-		return mDao.refuseApply(applyID,userName)*mDao.refuseUser(applyID,userName);
+	public int RefuseApply(int applyID,String userName,String manager) {
+		return mDao.refuseApply(applyID,userName,manager)*mDao.refuseUser(applyID,userName);
+	}
+	public int DeleteApply(int applyID) {
+		return mDao.DeleteApply(applyID);
 	}
 }

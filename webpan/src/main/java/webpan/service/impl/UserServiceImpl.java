@@ -59,5 +59,8 @@ public class UserServiceImpl implements UserService
 		List<File> f = ud.getFilebyid(id);
 		return f;
 	}
+	public User GetUserbyemail(String UserEmail) {
+		return ud.GetUserbyemail(UserEmail);
+	}
 	
 }

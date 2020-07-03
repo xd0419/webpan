@@ -103,7 +103,7 @@
 	        }else if(result.toString()=="emailfalse"){
 	        	alert("Register failed!! Email address format is not correct");
 	        }else if(result.toString()=="passflase"){
-	        	alert("Register failed!! password should not empty");
+	        	alert("Register failed!! password lengh should be 6-16");
 	        }
 		})
 	});

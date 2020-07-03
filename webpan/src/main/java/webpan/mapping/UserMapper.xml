@@ -18,6 +18,7 @@
 		<result column="apply_status" property="ApplyStatus" jdbcType="BOOLEAN"/>
 		<result column="apply_user" property="ApplyUser" jdbcType="VARCHAR"/>
 		<result column="apply_manager" property="ApplyManager" jdbcType="VARCHAR"/>
+		<result column="apply_result" property="ApplyResult" jdbcType="BOOLEAN"/>
 	</resultMap>
 	<resultMap type="webpan.model.File" id="FileMap">
 		<id column="file_id" property="FileID" jdbcType="INTEGER"/>
@@ -49,6 +50,11 @@
 		select distinct *
 		from user_info
 		where user_name = #{UserName}
+	</select>
+	<select id="GetUserbyemail" resultMap="UserMap" parameterType="java.lang.String">
+		select distinct *
+		from user_info
+		where user_email = #{UserEmail}
 	</select>
 	<select id="getFilebyid" resultMap="FileMap">
 		select *

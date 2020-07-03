@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 
 <head>
@@ -22,7 +23,19 @@
 		</ul>
 	</div>
 	<div style="width: 88%;float: right;">
-	<h4>Hi, ${User.getUserName()}!</h4>
+	<div class="input-group search">
+		<span class="input-group-addon">
+			<i class="material-icons" style="font-size: large;">search</i>
+		</span>
+		<input type="text" class="form-control" placeholder="search">
+	</div>
+	<br/><br/>
+	<h3>
+		Hi, <span style="color:#0e90d2;">${User.getUserName()}</span>!&nbsp;&nbsp;&nbsp;
+		<c:if test="${User.getUserType()=='admin'}">
+		<a href="/webpan/manager/manager_user" style="font-size: 15px;text-decoration:underline;">点击进入管理员界面</a>
+		</c:if>
+	</h3>
 	<h2>下载文件列表</h2>
 	<!--
 	<center><button class="list-title">文件列表</button></center>

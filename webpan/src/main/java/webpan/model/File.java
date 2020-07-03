@@ -39,7 +39,7 @@ public class File
 	public Date getFileUploadTime() {
 		return FileUploadTime;
 	}
-	public void setFileUpdateTime(Date fileUploadTime) {
+	public void setFileUploadTime(Date fileUploadTime) {
 		FileUploadTime = fileUploadTime;
 	}
 	public int getFileOwner() {

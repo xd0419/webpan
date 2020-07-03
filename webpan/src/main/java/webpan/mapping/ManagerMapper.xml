@@ -19,17 +19,22 @@
 		<result column="apply_status" property="ApplyStatus" jdbcType="BOOLEAN"/>
 		<result column="apply_user" property="ApplyUser" jdbcType="VARCHAR"/>
 		<result column="apply_manager" property="ApplyManager" jdbcType="VARCHAR"/>
+		<result column="apply_result" property="ApplyResult" jdbcType="BOOLEAN"/>
 	</resultMap>
 	<select id="getAllUsers" resultMap="UserMap">
 		select distinct *	
 		from user_info
+		order by user_name
 	</select>
 	<select id="getAllApplies" resultMap="ApplyMap">
 		select distinct *
 		from apply_info
+		order by apply_id desc
 	</select>
 	<select id="getApplyUsers" resultMap="UserMap">
-		SELECT user_id,user_name,user_passwd,user_usage,user_storage,user_key,user_email,user_type FROM user_info, apply_info WHERE user_name = apply_user
+		SELECT user_id,user_name,user_passwd,user_usage,user_storage,user_key,user_email,user_type 
+		FROM user_info, apply_info 
+		WHERE user_name = apply_user
 	</select>
 	
 	<update id = "setStorage">
@@ -39,7 +44,7 @@
     </update>
     <update id = "refuseApply">
         update apply_info
-        set apply_status = 1
+        set apply_status = 1, apply_manager = #{Manager}
         where apply_id = #{ApplyID}
     </update>
     <update id = "refuseUser">
@@ -54,7 +59,7 @@
     </update>
     <update id="agreeApply">
     	update apply_info
-        set apply_status = 1
+        set apply_status = 1, apply_result = 1, apply_manager = #{Manager}
         where apply_id = #{ApplyID}
     </update>
     
@@ -63,7 +68,11 @@
 		from user_info
 		where user_id = #{UserID}
 	</select>
-	
+	<delete id="DeleteApply">
+        delete 
+        from apply_info
+        where apply_id = #{ApplyID}
+    </delete>
 	
 	
 </mapper>

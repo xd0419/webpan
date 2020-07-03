@@ -12,6 +12,7 @@ public interface UserService {
 	public int register(String pass,String name,String email) throws NoSuchAlgorithmException;
 	public User login(String name,String pass);
 	public User GetUserbyid(int id);
+	public User GetUserbyemail(String UserEmail);
 	public User GetUserbyname(String UserName);
 	public int apply(String apply, String username);
 	public int CheckName(String UserName);

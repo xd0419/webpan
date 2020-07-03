@@ -11,6 +11,7 @@ public interface ManagerService {
 	public List<User> getApplyUsers();
 	public int SetStorage(int ID, double size);
 	public User GetUserbyid(int id);
-	public int AgreeApply(int applyID,String userName,double size);
-	public int RefuseApply(int applyID,String userName);
+	public int AgreeApply(int applyID,String userName,double size,String manager);
+	public int RefuseApply(int applyID,String userName,String manager);
+	public int DeleteApply(int applyID);
 }

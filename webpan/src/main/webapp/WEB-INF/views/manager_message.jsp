@@ -8,6 +8,13 @@
 	<link rel="stylesheet" type="text/css" href="/webpan/dist/css/homepage.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    
+    <style>
+		th,td{
+			text-align:center;
+			vertical-align:middle;
+		}
+	</style>
 </head>
 
 <body>
@@ -20,12 +27,15 @@
 	<div style="width: 88%;float: right;">
 		<div class="input-group search">
 			<span class="input-group-addon">
-				<i class="material-icons icon" style="font-size: large;">search</i>
-			</span>
-			<input type="text" class="form-control" placeholder="search for messages">
+				<i class="material-icons" style="font-size: large;">search</i>
+			</span> 
+			<input type="text" class="form-control" placeholder="search for messages of user(s)" id="key" onkeydown="onSearch(this)">
 		</div>
 		<br /><br />
-		<h3>Hi！Manager！</h3>
+		<h3>
+			Hi, Manager&nbsp;<span style="color:#0e90d2;">${User.getUserName()}</span>&nbsp;! &nbsp;&nbsp;
+			<a href="/webpan/user/homepage" style="font-size: 15px;text-decoration:underline;">点击返回用户界面</a>
+		</h3>
 		<br />
 		<span style="float: left;font-size: 30px">消息列表</span>
 
@@ -38,42 +48,50 @@
 					<th style="width: 8%;">序号</th>
 					<th style="width: 12%;">用户名</th>
 					<th style="width: 40%;">空间使用</th>
-					<th style="width: 10%;">申请扩容</th>
-					<th style="width: 30%;">消息处理</th>
+					<th style="width: 15%;">申请扩容</th>
+					<th style="width: 25%;">消息处理</th>
 				</tr>
 			</thead>
 			<tbody>
 			<c:forEach  items="${ApplyList}" var="apply" varStatus="status">
 				<tr style="color: #000000;">
-					<td>${apply.getApplyID()}</td>
-					<td>
-						${apply.getApplyUser()}
-					</td>
-					<td>
+					<td style="text-align:center;vertical-align:middle;">${status.index + 1 }</td>
+					<td style="text-align:center;vertical-align:middle;">${apply.getApplyUser()}</td>
+					<td style="text-align:center;vertical-align:middle;">
 						<div class="progress progress-striped active" style="float: left; width: 70%;">
 							<div class="progress-bar progress-bar-success" role="progressbar"
 								 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-								 style="width: ${UserList[status.index].getUserUsage()*100 / UserList[status.index].getUserStorage()}%;">
+								 style="width: ${UserList[ApplyList.size()-status.index-1].getUserUsage()*100 / UserList[ApplyList.size()-status.index-1].getUserStorage()}%;">
 							</div>
 						</div>
-						<span><strong>&nbsp;&nbsp;&nbsp;&nbsp;${UserList[status.index].getUserUsage()}M / ${UserList[status.index].getUserStorage()}M</strong></span>
+						<span><strong>&nbsp;&nbsp;&nbsp;&nbsp;${UserList[ApplyList.size()-status.index-1].getUserUsage()}M / ${UserList[ApplyList.size()-status.index-1].getUserStorage()}M</strong></span>
 					</td>
-					<td>
-						${apply.getApplySize()}
+					<td style="text-align:center;vertical-align:middle;">
+						${apply.getApplySize()}&nbsp;M
 					</td>
 					<td>
 						<c:if test="${!apply.getApplyStatus()}">
-							<button class="btn btn-primary" id="agree${apply.getApplyID()}" onclick="agree('${apply.getApplyID()}','${apply.getApplyUser()}','${apply.getApplySize()}');">
+							<button class="btn btn-primary btn-left" id="agree${apply.getApplyID()}" onclick="agree('${apply.getApplyID()}','${apply.getApplyUser()}','${apply.getApplySize()}');">
 							<i class="material-icons icon" style="font-size: large;">assignment_turned_in</i>
 							同意 </button>
 							<button class="btn btn-danger" id="refuse${apply.getApplyID()}" onclick="refuse('${apply.getApplyID()}','${apply.getApplyUser()}');">
 							<i class="material-icons icon" style="font-size: large;">cancel</i>
 							拒绝</button>
 						</c:if>
-						<c:if test="${apply.getApplyStatus()}">
-							<button type="button" class="btn btn-primary btn-lg" disabled="disabled">
+						<c:if test="${apply.getApplyStatus() && apply.getApplyResult()}">
+							<button class="btn btn-primary btn-left" disabled="disabled">
 							<i class="material-icons icon" style="font-size: large;">done</i>
-							已处理 </button>
+							已同意 </button>
+						</c:if>
+						<c:if test="${apply.getApplyStatus() && !apply.getApplyResult()}">
+							<button class="btn btn-primary btn-left" disabled="disabled">
+							<i class="material-icons icon" style="font-size: large;">done</i>
+							已拒绝 </button>
+						</c:if>
+						<c:if test="${apply.getApplyStatus()}">
+							<button class="btn btn-warning" onclick="delete_apply('${apply.getApplyID()}');">
+							<i class="material-icons icon" style="font-size: large;">delete_forever</i>
+							删除 </button>
 						</c:if>
 					</td>
 				</tr>
@@ -96,8 +114,24 @@
 				location.reload();
 			})
 		}
-		
-		
+	</script>
+	<script type="text/javascript">
+		function delete_apply(id) {
+			if(confirm("确定删除此消息？")){
+				var applyID = {"ApplyID":id};
+				$.post("/webpan/manager/delete_apply",applyID,function(result){
+					if(result.toString() == "true")
+						alert("Delete Successfully!!")
+					else
+						alert("Fail to Delete...")
+					location.reload();
+				})
+	    	 }
+	    	 else{
+	    		  return;
+	    	 }
+			
+		}
 	</script>
 	<script type="text/javascript">
 		function refuse(id,user) {
@@ -110,6 +144,26 @@
 				location.reload();
 			})
 		}
+	</script>
+	
+	<script type="text/javascript">
+	function onSearch(obj){
+		  setTimeout(function(){
+		    var storeId = document.getElementById('notice-list');
+		    var rowsLength = storeId.rows.length;
+		    var key = obj.value;
+		    var searchCol = 1;
+		    for(var i=1;i<rowsLength;i++){
+		      var searchText = storeId.rows[i].cells[searchCol].innerHTML;
+		      if(searchText.match(key)){
+		        storeId.rows[i].style.display='';
+		      }else{
+		        storeId.rows[i].style.display='none';
+		      }
+		    }
+		  },200);//200为延时时间
+		}
+	
 	</script>
 	
 	<!-- App scripts -->

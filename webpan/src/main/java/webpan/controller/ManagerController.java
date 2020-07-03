@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import webpan.model.Apply;
+import webpan.model.File;
 import webpan.model.User;
 import webpan.service.ManagerService;
+import webpan.service.UserService;
 
 @Controller
 @RequestMapping("/manager")
@@ -21,12 +23,21 @@ public class ManagerController
 {
 	@Resource
 	private ManagerService mservice;
+	@Resource
+	private UserService uservice;
 	@RequestMapping("/manager_user")
 	@ResponseBody
 	public ModelAndView getAllUsers(HttpServletRequest request) {
 		ModelAndView modelview = new ModelAndView("/manager_user");
-		List<User> allUserList = mservice.getAllUsers();
-		modelview.addObject("UserList", allUserList);
+		Object o = request.getSession().getAttribute("ID");
+		if (o != null){
+			String IDstr1 = o.toString();
+			int myid = Integer.parseInt(IDstr1);
+			User me=uservice.GetUserbyid(myid);
+			List<User> allUserList = mservice.getAllUsers();
+			modelview.addObject("UserList", allUserList);
+			modelview.addObject("User",me);
+		}
 		return modelview;
 	}
 	
@@ -34,10 +45,17 @@ public class ManagerController
 	@ResponseBody
 	public ModelAndView getAllUers(HttpServletRequest request) {
 		ModelAndView modelview = new ModelAndView("/manager_message");
-		List<Apply> allApplyList = mservice.getAllApplies();
-		List<User> allUserList = mservice.getApplyUsers();
-		modelview.addObject("ApplyList", allApplyList);
-		modelview.addObject("UserList", allUserList);
+		Object o = request.getSession().getAttribute("ID");
+		if (o != null){
+			String IDstr1 = o.toString();
+			int myid = Integer.parseInt(IDstr1);
+			User me=uservice.GetUserbyid(myid);
+			modelview.addObject("User",me);
+			List<Apply> allApplyList = mservice.getAllApplies();
+			List<User> allUserList = mservice.getApplyUsers();
+			modelview.addObject("ApplyList", allApplyList);
+			modelview.addObject("UserList", allUserList);
+		}
 		return modelview;
 	}
 	
@@ -64,7 +82,6 @@ public class ManagerController
 		else {
 			return "false";
 		}
-
 	}
 	
 	@RequestMapping("/agree")
@@ -76,7 +93,10 @@ public class ManagerController
 		double size = Double.parseDouble(sizeStr);
 		int applyID = Integer.parseInt(applyIDStr);
 		
-		int result = mservice.AgreeApply(applyID,username,size);
+		Object o = request.getSession().getAttribute("ID");
+		User me=uservice.GetUserbyid(Integer.parseInt(o.toString()));
+		
+		int result = mservice.AgreeApply(applyID,username,size,me.getUserName());
 		if (result != 0)
 		{
 			return "true";
@@ -92,7 +112,25 @@ public class ManagerController
 		String applyIDStr = request.getParameter("ApplyID");
 		String username = request.getParameter("UserName");
 		int applyID = Integer.parseInt(applyIDStr);
-		int result = mservice.RefuseApply(applyID,username);
+		
+		Object o = request.getSession().getAttribute("ID");
+		User me=uservice.GetUserbyid(Integer.parseInt(o.toString()));
+		
+		int result = mservice.RefuseApply(applyID,username,me.getUserName());
+		if (result != 0)
+		{
+			return "true";
+		}
+		else {
+			return "false";
+		}
+	}
+	
+	@RequestMapping("/delete_apply")
+	@ResponseBody
+	public String DeleteApply(HttpServletRequest request) {
+		
+		int result = mservice.DeleteApply(Integer.parseInt(request.getParameter("ApplyID")));
 		if (result != 0)
 		{
 			return "true";

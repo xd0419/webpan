@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="webpan.dao.FileDao">
+	<resultMap type="webpan.model.File" id="FileMap">
+		<id column="file_id" property="FileID" jdbcType="INTEGER"/>
+		<result column="file_name" property="FileName" jdbcType="VARCHAR"/>
+		<result column="file_type" property="FileType" jdbcType="VARCHAR"/>
+		<result column="file_size" property="FileSize" jdbcType="DOUBLE"/>
+		<result column="file_upload_time" property="FileUploadTime" jdbcType="DATE"/>
+		<result column="file_owner" property="FileOwner" jdbcType="INTEGER"/>
+		<result column="file_hash" property="FileHash" jdbcType="VARCHAR"/>
+		<result column="file_path" property="FilePath" jdbcType="VARCHAR"/>
+	</resultMap>
 	<insert id="InsertFileInfo">
 		insert into file_info (file_name,file_type,file_size,file_upload_time,file_owner,file_hash,file_path)
 		value
@@ -16,14 +26,19 @@
 	    set user_usage = user_usage + #{size}
 	    where user_id = #{owner}
 	</update>
-	<select id = "GetSize" resultType = "java.lang.Double">
-	    select file_size
-	    from file_info
-	    where file_id = #{file_id}
-	</select>
 	<delete id="DeleteFile">
         delete 
         from file_info
         where file_id = #{file_id}
     </delete>
+    <select id="GetFileById" resultMap="FileMap" parameterType="java.lang.Integer">
+		select distinct *
+		from file_info
+        where file_id = #{file_id}
+	</select>
+	<select id="GetFileByName" resultMap="FileMap" parameterType="java.lang.String">
+		select distinct *
+		from file_info
+        where file_name = #{file_name} and file_owner = #{owner_id}
+	</select>
 </mapper>

@@ -2,10 +2,11 @@ package webpan.model;
 
 public class Apply {
 	private int ApplyID;
-	private int ApplySize;
+	private double ApplySize;
 	private boolean ApplyStatus;
 	private String ApplyUser;
 	private String ApplyManager;
+	private boolean ApplyResult;
 	
 	public int getApplyID() {
 		return ApplyID;
@@ -13,10 +14,10 @@ public class Apply {
 	public void setApplyID(int applyID) {
 		ApplyID = applyID;
 	}
-	public int getApplySize() {
+	public double getApplySize() {
 		return ApplySize;
 	}
-	public void setApplySize(int applySize) {
+	public void setApplySize(double applySize) {
 		ApplySize = applySize;
 	}
 	public boolean getApplyStatus() {
@@ -36,6 +37,12 @@ public class Apply {
 	}
 	public void setApplyManager(String applyManager) {
 		ApplyManager = applyManager;
+	}
+	public boolean getApplyResult() {
+		return ApplyResult;
+	}
+	public void setApplyResult(boolean applyResult) {
+		ApplyResult = applyResult;
 	}
 	
 }

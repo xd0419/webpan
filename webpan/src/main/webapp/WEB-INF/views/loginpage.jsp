@@ -15,6 +15,10 @@
 
     <!-- App styles -->
     <link rel="stylesheet" href="/webpan/dist/css/app.min.css">
+    <!-- 
+    	https://localhost:8443/webpan/user/loginpage
+    	http://localhost:8080/webpan/user/homepage
+     -->
 </head>
 <body class="form-membership">
 
@@ -94,9 +98,9 @@
 						var pass=document.getElementById("pass").value;
 						var loginForm = {"UserName":id,"Password":pass};
 						$.post("/webpan/user/login",loginForm,function(result){
-							if(result=="true"){//注册成功
-				            	alert("Login successfully!!");
-				                window.location.href="/webpan/user/homepage";
+							if(result=="true"){//登录成功
+								document.getElementById("login").innerHTML='Login successfully...';
+								setTimeout(function(){window.location.href="/webpan/user/homepage";},1000);
 				            }else{
 								alert("Username(Email) or Password failed!!");
 				            }

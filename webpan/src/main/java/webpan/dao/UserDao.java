@@ -12,6 +12,7 @@ public interface UserDao {
 	public User login(@Param("User")String User,@Param("UserPass")String Password);
 	public User GetUserbyid(@Param("Id")int id);
 	public User GetUserbyname(@Param("UserName")String UserName);
+	public User GetUserbyemail(@Param("UserEmail")String UserEmail);
 	public int applyApply(@Param("ApplySize")String ApplySize, @Param("UserName")String UserName);
 	public int applyUser(@Param("ApplySize")String ApplySize, @Param("UserName")String UserName);
 	public int CheckName(@Param("UserName")String UserName);
