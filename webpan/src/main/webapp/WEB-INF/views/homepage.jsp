@@ -174,10 +174,10 @@
 										</div>
 										<div class="modal-body">
 											<br />
-											<div class="input-group" style="float:left;">
+											<div class="input-group" style="float:left;width:90%">
 												<span class="input-group-addon">文件名</span>
-												<input type="text" id="new_file_name${f.getFileID()}" class="form-control title">
-											</div>
+												<input type="text" id="new_file_name${f.getFileID()}" class="form-control title" placeholder="${f.getFileName()}">
+											</div><span style="float:left;margin-top:5px;"> .${f.getFileType()}</span>
 											<br /><br />
 										</div>
 										<div class="modal-footer">
@@ -277,7 +277,7 @@
 		function selectFile() {
 			var arr = {
 				'Documents':['doc','docx','ppt','pptx','xls','xlsx','pdf','txt'],
-				'Media':['mp3','mp4','avi','wav','au','wma','amr','mmf','swf','mov','ram'],
+				'Media':['mp3','mp4','avi','wav','au','wma','amr','mmf','swf','mov','ram','flv'],
 				'CompressedFile':['rar','zip','gz','arj','z'],
 				'Picture':['png','jpg','jpeg','gif','bmp','pic','tif'],
 				'System':['int','dll','adt','sys'],

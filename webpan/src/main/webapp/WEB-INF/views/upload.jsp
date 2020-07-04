@@ -215,8 +215,8 @@
 			chunkRetry : 2, //如果某个分片由于网络问题出错，允许自动重传次数
 			runtimeOrder: 'html5,flash',
 			accept: {
-			   	extensions: "txt,gif,jpg,jpeg,bmp,png,zip,rar,war,pdf,cebx,doc,docx,ppt,pptx,xls,xlsx,mp4",
-				mimeTypes: '.txt,.gif,.jpg,.jpeg,.bmp,.png,.zip,.rar,.war,.pdf,.cebx,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.mp4',
+			   	extensions: "txt,gif,jpg,jpeg,bmp,png,zip,rar,war,pdf,cebx,doc,docx,ppt,pptx,xls,xlsx,mp4,flv",
+				mimeTypes: '.txt,.gif,.jpg,.jpeg,.bmp,.png,.zip,.rar,.war,.pdf,.cebx,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.mp4,.flv',
 			},
 			duplicate: false //是否支持重复上传
 			});
@@ -310,6 +310,7 @@
 	 	// 文件上传成功
 	    uploader.on( 'uploadSuccess', function( file ) {
 	        $( '#'+file.id ).find('.file-status').text('已上传');
+	        $li.find('.per').text('100%');
 	    });
 		// 手动上传
 		// 文件上传失败，显示上传出错

@@ -133,7 +133,7 @@
 			var shareForm = {"fileID":fileID};
 			$.post("/webpan/file/getsharedfile2me",shareForm,function(result){
 				if(result.toString()=="false"){
-					alert("转存失败");
+					alert("转存失败，您的存储空间不足");
 	            }else if(result.toString()=="same"){
 	            	alert("这是你自己的文件哦");
 	            }else if(result.toString()=="true"){
