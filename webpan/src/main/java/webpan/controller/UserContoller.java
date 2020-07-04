@@ -18,6 +18,9 @@ import webpan.service.UserService;
 
 import java.security.MessageDigest;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.codec.binary.Hex;
 
 @Controller
@@ -30,7 +33,6 @@ public class UserContoller
 	@ResponseBody
 	public String Login(HttpServletRequest request)
 	{
-		
 		String name = request.getParameter("UserName");
 		String pass = request.getParameter("Password");
 		
@@ -52,6 +54,15 @@ public class UserContoller
 		return modelview;
 	}
 	
+	@RequestMapping("/logout")
+	@ResponseBody
+	public ModelAndView Logout(HttpServletRequest request)
+	{
+		request.getSession().invalidate();
+		ModelAndView modelview = new ModelAndView("/loginpage");
+		return modelview;
+	}
+	
 	@RequestMapping("/register")
 	@ResponseBody
 	public String Register(HttpServletRequest request) throws NoSuchAlgorithmException
@@ -61,24 +72,37 @@ public class UserContoller
 		String Pass = request.getParameter("UserPass");
 		String Email = request.getParameter("UserEmail");
 		int CheckName = uservice.CheckName(UserName);
+		int CheckEmail = uservice.CheckEmail(Email);
+		String regEx = "[ _`~!@#$%^&*()+=|{}':;',/\\[\\].<>/?~ï¼@#ï¿¥%â€¦â€¦&*ï¼ˆï¼‰â€”â€”+|{}ã€ã€‘â€˜ï¼›ï¼šâ€â€œâ€™ã€‚ï¼Œã€ï¼Ÿ]|\n|\r|\t";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(UserName);
+        if(m.find() || UserName.indexOf("\\") >=0) {
+			return "usernamebad";
+		}
 		if (!Email.matches("[\\w\\.\\-]+@([\\w\\-]+\\.)+[\\w\\-]+")) 
 		{
 			return "emailfalse";
 		}
 		else if( CheckName != 0) {
 			return "namerepeat";
-		}
-		else if (Pass.length()<6||Pass.length()>16)
-		{
+		}else if( CheckEmail != 0) {
+			return "emailrepeat";
+		}else if (Pass.length()<6||Pass.length()>16){
 			return "passflase";
+		}
+		m = p.matcher(Pass);
+		if(m.find() || Pass.indexOf("\\") >=0) {
+			return "passbad";
 		}
 		String md5Pass = generate(Pass);
 		int result = uservice.register(md5Pass,UserName,Email);
 		if(result==1) {
 			java.io.File file=new java.io.File("C:\\webpan\\"+UserName);
+			java.io.File tmpfile=new java.io.File("C:\\webpan\\"+UserName+"\\tmp");
 			if(!file.exists())
 			{
 				file.mkdir();
+				tmpfile.mkdir();
 			}
 			return "true";
 		}
@@ -113,10 +137,10 @@ public class UserContoller
 	}
 	
 	
-	@RequestMapping("/download")
+	@RequestMapping("/sharepage")
 	public ModelAndView showDownload(HttpServletRequest request)
 	{
-		ModelAndView modelview = new ModelAndView("/download");
+		ModelAndView modelview = new ModelAndView("/sharepage");
 		Object o = request.getSession().getAttribute("ID");
 		if (o != null)
 		{
@@ -128,7 +152,7 @@ public class UserContoller
 		}
 		else
 		{
-			return new ModelAndView("/download");
+			return new ModelAndView("/sharepage");
 		}
 	}
 	
@@ -152,7 +176,7 @@ public class UserContoller
 		return "false";
 	}
 	
-    /** ÆÕÍ¨MD5 *//*
+    /** æ™®é€šMD5ï¼Œå¯ä»¥åˆ äº† *//*
     public String MD5(String input) {
         MessageDigest md5 = null;
         try {
@@ -180,7 +204,7 @@ public class UserContoller
 
     }*/
 
-    /** ¼ÓÑÎMD5 */
+    /** åŠ ç›MD5 */
     public String generate(String password) {
         Random r = new Random();
         StringBuilder sb = new StringBuilder(16);
@@ -203,7 +227,7 @@ public class UserContoller
         return new String(cs);
     }
 
-    /** Ğ£Ñé¼ÓÑÎºóÊÇ·ñºÍÔ­ÎÄÒ»ÖÂ */
+    /** æ ¡éªŒåŠ ç›åæ˜¯å¦å’ŒåŸæ–‡ä¸€è‡´ */
     public boolean verify(String password, String md5) {
         char[] cs1 = new char[32];
         char[] cs2 = new char[16];
@@ -216,7 +240,7 @@ public class UserContoller
         return md5Hex(password + salt).equals(new String(cs1));
     }
 
-    /** »ñÈ¡Ê®Áù½øÖÆ×Ö·û´®ĞÎÊ½µÄMD5ÕªÒª */
+    /** è·å–åå…­è¿›åˆ¶å­—ç¬¦ä¸²å½¢å¼çš„MD5æ‘˜è¦ */
     private String md5Hex(String src) {
         try {
             MessageDigest md5 = MessageDigest.getInstance("MD5");

@@ -104,6 +104,12 @@
 	        	alert("Register failed!! Email address format is not correct");
 	        }else if(result.toString()=="passflase"){
 	        	alert("Register failed!! password lengh should be 6-16");
+	        }else if(result.toString()=="passbad"){
+	        	alert("Register failed!! password includes illegal chars");
+	        }else if(result.toString()=="emailrepeat"){
+	        	alert("Register failed!! Email address repeat");
+	        }else if(result.toString()=="usernamebad"){
+	        	alert("Register failed!! username includes illegal chars");
 	        }
 		})
 	});

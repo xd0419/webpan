@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import webpan.dao.FileDao;
 import webpan.model.File;
+import webpan.model.User;
 import webpan.service.FileService;
 
 @Transactional
@@ -30,8 +31,14 @@ public class FileServiceImpl implements FileService
 	public File GetFileById(int fileId) {
 		return fdao.GetFileById(fileId);
 	}
-	public File GetFileByName(String fileName,String ownerId) {
-		return fdao.GetFileByName(fileName,ownerId);
+	public File GetFileByName(String fileName,String fileType,String ownerId) {
+		return fdao.GetFileByName(fileName,fileType,ownerId);
+	}
+	public User GetOwnerByFile(int fileId) {
+		return fdao.GetOwnerByFile(fileId);
+	}
+	public int ChangeFileName(int fileId, String new_filename,String new_filepath) {
+		return fdao.ChangeFileName(fileId, new_filename, new_filepath);
 	}
 	
 }

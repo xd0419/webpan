@@ -16,6 +16,7 @@ public interface UserDao {
 	public int applyApply(@Param("ApplySize")String ApplySize, @Param("UserName")String UserName);
 	public int applyUser(@Param("ApplySize")String ApplySize, @Param("UserName")String UserName);
 	public int CheckName(@Param("UserName")String UserName);
+	public int CheckEmail(@Param("UserEmail")String UserEmail);
 	public List<File> getFilebyid(@Param("Id")int id);
 	
 }

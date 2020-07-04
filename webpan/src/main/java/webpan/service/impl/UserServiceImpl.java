@@ -62,5 +62,8 @@ public class UserServiceImpl implements UserService
 	public User GetUserbyemail(String UserEmail) {
 		return ud.GetUserbyemail(UserEmail);
 	}
+	public int CheckEmail(String UserEmail) {
+		return ud.CheckEmail(UserEmail);
+	}
 	
 }

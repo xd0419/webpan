@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="/webpan/dist/js/logout.js"></script>
 	<style>
 		th,td{
 			text-align:center;
@@ -24,6 +25,10 @@
 			<li class="active"><a href="/webpan/manager/manager_user">用户列表</a></li>
 			<li><a href="/webpan/manager/manager_message">消息列表</a></li>
 		</ul>
+		<button type="button" class="btn" style="position: absolute;float: left;top: 80%;" onclick="logout();">
+			<span class="glyphicon glyphicon-log-out"></span>&nbsp;
+			<span style="font-size: 10px;">Log out</span>
+		</button>
 	</div>
 	<div style="width: 88%;float: right;">
 		<div class="input-group search">

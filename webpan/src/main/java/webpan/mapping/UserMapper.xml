@@ -76,4 +76,9 @@
 		from user_info
 		where user_name = #{UserName}
 	</select>
+	<select id="CheckEmail" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(*)
+		from user_info
+		where user_email = #{UserEmail}
+	</select>
 </mapper>

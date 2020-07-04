@@ -11,6 +11,17 @@
 		<result column="file_hash" property="FileHash" jdbcType="VARCHAR"/>
 		<result column="file_path" property="FilePath" jdbcType="VARCHAR"/>
 	</resultMap>
+		<resultMap type="webpan.model.User" id="UserMap">
+		<id column="user_id" property="UserID" jdbcType="INTEGER"/>
+		<result column="user_name" property="UserName" jdbcType="VARCHAR"/>
+		<result column="user_passwd" property="UserPass" jdbcType="VARCHAR"/>
+		<result column="user_email" property="UserEmail" jdbcType="VARCHAR"/>
+		<result column="user_usage" property="UserUsage" jdbcType="DOUBLE"/>
+		<result column="user_storage" property="UserStorage" jdbcType="DOUBLE"/>
+		<result column="user_key" property="UserKey" jdbcType="VARCHAR"/>
+		<result column="user_type" property="UserType" jdbcType="VARCHAR"/>
+		<result column="user_message_status" property="UserMessageStatus" jdbcType="BOOLEAN"/>
+	</resultMap>
 	<insert id="InsertFileInfo">
 		insert into file_info (file_name,file_type,file_size,file_upload_time,file_owner,file_hash,file_path)
 		value
@@ -26,6 +37,11 @@
 	    set user_usage = user_usage + #{size}
 	    where user_id = #{owner}
 	</update>
+	<update id="ChangeFileName">
+	    update file_info
+	    set file_name = #{file_name}, file_path = #{file_path}
+	    where file_id = #{file_id}
+	</update>
 	<delete id="DeleteFile">
         delete 
         from file_info
@@ -39,6 +55,12 @@
 	<select id="GetFileByName" resultMap="FileMap" parameterType="java.lang.String">
 		select distinct *
 		from file_info
-        where file_name = #{file_name} and file_owner = #{owner_id}
+        where file_name = #{file_name} and file_owner = #{owner_id} and file_type = #{file_type}
 	</select>
+	<select id="GetOwnerByFile" resultMap="UserMap" parameterType="java.lang.Integer">
+		select distinct *
+		from user_info
+		where user_id = (select file_owner from file_info where file_id=#{file_id})
+	</select>
+	
 </mapper>

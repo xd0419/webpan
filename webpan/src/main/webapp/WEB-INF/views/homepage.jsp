@@ -10,15 +10,20 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="/webpan/dist/js/logout.js"></script>
 </head>
 
 <body>
 	<div class="container" id="side-box" style="width: 10%; float: left;">
 		<ul class="nav nav-pills nav-stacked">
 			<li class="active"><a href="/webpan/user/homepage">文件列表</a></li>
-			<li><a href="/webpan/file/uploadpage">上传列表</a></li>
-			<li><a href="/webpan/user/download">下载列表</a></li>
+			<li><a href="/webpan/file/uploadpage">上传文件</a></li>
+			<li><a href="/webpan/user/sharepage">共享空间</a></li>
 		</ul>
+		<button type="button" class="btn" style="position: absolute;float: left;top: 80%;" onclick="logout();">
+			<span class="glyphicon glyphicon-log-out"></span>&nbsp;
+			<span style="font-size: 10px;">Log out</span>
+		</button>
 	</div>
 	<div style="width: 88%;float: right;">
 		<div class="input-group search">
@@ -119,21 +124,7 @@
 				<option value="Others">Others</option>
 			</select>
 		</div>
-		<div class="list-title1" style="background-color: blueviolet;
-    color: white;
-    display: block;
-    margin: 0 auto;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    text-decoration: none;
-    width: 200px;
-    height: 50px;
-    font-size: 18px;
-    padding:10px;
-    margin-bottom:20px;
-    
-    ">文件列表</div>
+		<div class="list-title">文件列表</div>
 		
 		<c:if test="${fileList.size() != 0}">
 		<table id="notice-list" class="table table-bordered">
@@ -150,7 +141,11 @@
 					<tr style="color: #000000;">
 						<td style="text-align:center;vertical-align:middle;">${idxStatus.index + 1 }</td>
 						<td style="font-size:25px;">
-							${f.getFileName()}<br/>
+							${f.getFileName()}&nbsp;&nbsp;
+							<button style="background: none;border:none;outline:none;" data-toggle="modal" data-target="#mymodal_change${f.getFileID()}">
+								<span class="glyphicon glyphicon-edit" style="font-size:20px;color:#6495ED;"></span>
+							</button>
+							<br/>
 							<span style="font-size:10px;color:blue">${f.getFileSize()}M</span>
 						</td>
 						<td style="text-align:center;vertical-align:middle;">${f.getFileType()}</td>
@@ -161,9 +156,37 @@
 							<button class="btn btn-primary btn-left" id="download${f.getFileID()}" onclick="download_file('${f.getFileID()}','${User.getUserID()}');">
 								<i class="material-icons" style="font-size: large;">file_download</i>
 							</button>
+							<button class="btn btn-warning btn-left" data-toggle="modal" data-target="#mymodal_share${f.getFileID()}">
+								<i class="material-icons" style="font-size: large;">share</i>
+							</button>
 							<button class="btn btn-danger" data-toggle="modal" data-target="#mymodal${f.getFileID()}">
 								<i class="material-icons" style="font-size: large;">delete_forever</i>
 							</button>
+							
+							<div class="modal fade" id="mymodal_change${f.getFileID()}">
+								<div class="modal-dialog" style="width: 400px;">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">
+												<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+											</button>
+											<h4 class="modal-title" style="float:left;">输入新的文件名</h4>
+										</div>
+										<div class="modal-body">
+											<br />
+											<div class="input-group" style="float:left;">
+												<span class="input-group-addon">文件名</span>
+												<input type="text" id="new_file_name${f.getFileID()}" class="form-control title">
+											</div>
+											<br /><br />
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" style="margin-right: 20px;" data-dismiss="modal">关 闭</button>
+											<button type="button" class="btn btn-primary" onclick="change_file_name(${f.getFileID()});">确 定</button>
+										</div>
+									</div><!-- /.modal-content -->
+								</div><!-- /.modal-dialog -->
+							</div><!-- /.modal -->
 							
 							<div class="modal fade" id="mymodal_detail${f.getFileID()}">
 								<div class="modal-dialog" style="width: 500px;">
@@ -181,6 +204,32 @@
 											文件所有者：${User.getUserName()}<br>
 											文件hash值：${f.getFileHash()}<br>
 											上传时间：${f.getFileUploadTime()}<br>
+										</div>
+									</div><!-- /.modal-content -->
+								</div><!-- /.modal-dialog -->
+							</div><!-- /.modal -->
+							
+							<div class="modal fade" id="mymodal_share${f.getFileID()}">
+								<div class="modal-dialog" style="width: 400px;">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">
+												<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+											</button> 
+											<span class="modal-title" style="float:left;">
+											<i class="material-icons icon" style="font-size: x-large;color:blue">warning</i>
+											点击获取分享码：</span>
+											<button class="btn btn-primary" onclick="get_share('${f.getFileID()}');" style="float:left;">获 取</button>
+										</div>
+										<div class="modal-body">
+												文件 “${f.getFileName()}” 的分享码：<br>
+												<textarea style="color:blue;resize:none;text-align:center;" id="share${f.getFileID()}" disabled="disabled"></textarea>
+												<br>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-primary" style="float:left" onclick="copy_share(${f.getFileID()});">复制分享码</button>
+											<button class="btn btn-default" data-dismiss="modal">关闭窗口</button>
+											
 										</div>
 									</div><!-- /.modal-content -->
 								</div><!-- /.modal-dialog -->
@@ -311,7 +360,7 @@
 	</script>
 	
 	<script type="application/javascript">
-	function download_file(fileID,userID){
+	function download_file(fileID){
 		var form = $("<form>"); //定义一个form表单  
 		
 	        form.attr("id", "downloadform");
@@ -319,12 +368,6 @@
 	        form.attr("target", "");
 	        form.attr("method", "post");
 	        form.attr("action", "/webpan/file/download");
-
-            var input1 = $("<input>");
-            input1.attr("type", "hidden");
-            input1.attr("name", "userID");
-            input1.attr("value", userID);
-            form.append(input1);
 
 			var input2 = $("<input>");
             input2.attr("type", "hidden");
@@ -409,6 +452,63 @@
 		    }
 		});
 	})
+	</script>
+	
+	
+	
+	<script type="text/javascript">
+		function get_share(id){
+			var applyForm = {"FileId":id};
+			$.post("/webpan/file/sharefile",applyForm,function(result){
+				var share_id = "share" + id;
+				document.getElementById(share_id).value = result.toString();
+			})
+		}
+	</script>
+	
+	<script type="text/javascript">
+		function copy_share(id){
+			var share_id = "share" + id;
+			var text = document.getElementById(share_id).value;
+			if(text.length == 0){
+				alert("请先获取分享码");
+				return;
+			}
+			var tag = document.createElement('input');
+			tag.setAttribute('id', 'cp_zdy_input');
+			tag.value = text;
+			document.getElementsByTagName('body')[0].appendChild(tag);
+			document.getElementById('cp_zdy_input').select();
+			document.execCommand('copy');
+			document.getElementById('cp_zdy_input').remove();
+			alert("复制成功，快去分享给你的小伙伴吧！");
+		}
+	</script>
+	
+	<script type="text/javascript">
+		function change_file_name(id){
+			var newFileName=document.getElementById("new_file_name" + id).value;
+			var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+			if(newFileName.length == 0){
+				alert("文件名不能为空");
+				return;
+			}else if(pattern.test(newFileName) || newFileName.indexOf("\\") >=0){
+				alert("文件名非法，请重新输入");
+				return;
+			}
+			var fileForm = {"FileID":id,"newFileName":newFileName};
+			$.post("/webpan/file/changefilename",fileForm,function(result){
+				if(result.toString()=="true"){
+					alert("修改成功");
+					location.reload();
+				}else{
+					alert(result);
+					return;
+				}
+					
+			})
+		}
+	
 	</script>
 	
 </body>

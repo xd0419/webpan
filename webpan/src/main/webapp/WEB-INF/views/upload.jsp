@@ -4,156 +4,89 @@
 
 <head>
 	<meta charset="utf-8" />
-	<title>上传列表</title>
+    <title>上传列表</title>
 	<link rel="stylesheet" type="text/css" href="/webpan/dist/css/homepage.css" />
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="/webpan/dist/webuploader/webuploader.css"/>
 	<script src="/webpan/dist/webuploader/webuploader.js"></script>
 	<script src="/webpan/dist/webuploader/webuploader.min.js"></script>
 	<link rel="stylesheet" href="/webpan/dist/jquery-ui/jquery-ui.min.css">
 	<script src="/webpan/dist/jquery-ui/jquery-ui.min.js"></script>
+	<script src="/webpan/dist/js/logout.js"></script>
 </head>
 
 <body>
 	<div class="container" id="side-box" style="width: 10%; float: left;">
 		<ul class="nav nav-pills nav-stacked">
 			<li><a href="/webpan/user/homepage">文件列表</a></li>
-			<li class="active"><a href="/webpan/file/uploadpage">上传列表</a></li>
-			<li><a href="/webpan/user/download">下载列表</a></li>
+			<li class="active"><a href="/webpan/file/uploadpage">上传文件</a></li>
+			<li><a href="/webpan/user/sharepage">共享空间</a></li>
 		</ul>
+		<button type="button" class="btn" style="position: absolute;float: left;top: 80%;" onclick="logout();">
+			<span class="glyphicon glyphicon-log-out"></span>&nbsp;
+			<span style="font-size: 10px;">Log out</span>
+		</button>
 	</div>
 	<div style="width: 88%;float: right;">
 	<div class="input-group search">
 		<span class="input-group-addon">
-			<i class="material-icons icon" style="font-size: large;">search</i>
+			<i class="material-icons" style="font-size: large;">search</i>
 		</span>
 		<input type="text" class="form-control" placeholder="search">
 	</div>
 	
-	<div>
-		
-		<div id="id-upload-box" class="upload-box">
-			<a href="javascript:void(0)" onclick="document.getElementById('id-upload-box').style.display='none';
-				document.getElementById('fade').style.display='none'" style="float: right;">
-				取消
-			</a>
-			<div style="width:300px;text-align:left">
-				<h4>选择要上传的文件</h4>
-				<hr style="border:0.5px solid black;" />
-			</div>
-			<br />
-			<form id="uploadform" enctype="multipart/form-data" method="post">
-			<div class="form-group">
-			<div class="col-sm-4 control-label">选择文件</div>
-			<div class="col-sm-6">
-				<div class="input-group">
-				<input id='location' class="form-control" onclick="$('#i-file').click();">
-					<label class="input-group-btn">
-						<input type="button" id="i-check" value="浏览文件" class="btn btn-primary" onclick="$('#upload_file').click();">
-					</label>
+	<button type="button" class="btn btn-primary" style="float: right" data-toggle="modal" data-target="#mymodal_upload">
+		<i class="material-icons icon" style="font-size: large;">file_upload</i>
+		上传文件
+	</button>
+	<div class="modal fade" id="mymodal_upload">
+		<div class="modal-dialog" style="width: 400px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title">选择要上传的文件</h4>
 				</div>
-			</div>
-			<input type="file" name="upload_file" id='upload_file'  accept=".*" onchange="$('#location').val($('#upload_file').val());" style="display: none">
-			</div>
-			</form>
-			<br />
-			<br />
-			<button type="button" class="btn btn-danger" style="width:100px" id="upload">上传</button>
-			<br/><br/>
-			上传进度：
-			<progress></progress>
-			<br/>
-			<p id="progress">0 bytes</p>
-			<p id="info"></p>
-			
-		</div>
-	</div>
+				<div class="modal-body">
+					<br />
+					<form id="uploadform" enctype="multipart/form-data" method="post">
+						<div class="input-group">
+							<input id='location' class="form-control" onclick="$('#i-file').click();">
+							<label class="input-group-btn">
+								<input type="button" id="i-check" value="浏览文件" class="btn btn-primary" onclick="$('#upload_file').click();">
+							</label>
+						</div>
+						<input type="file" name="upload_file" id='upload_file'  accept=".*" onchange="$('#location').val($('#upload_file').val());" style="display: none">			
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default"  data-dismiss="modal" style="margin-right: 20px;">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="upload();">上传</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	
 	<br /><br />
-	<h4>Hi, ${User.getUserName()}!</h4>
-	<h2>上传文件列表</h2>
+	<h3>
+		Hi, <span style="color:#0e90d2;">${User.getUserName()}</span>!&nbsp;&nbsp;&nbsp;
+		<c:if test="${User.getUserType()=='admin'}">
+		<a href="/webpan/manager/manager_user" style="font-size: 15px;text-decoration:underline;">点击进入管理员界面</a>
+		</c:if>
+	</h3>
+	<h2>大文件上传</h2>
 	<!--
 	<center><button class="list-title">文件列表</button></center>
 	-->
-	<div>
-		<a href="javascript:void(0)"
-		onclick="document.getElementById('id-upload-box').style.display='block';
-					document.getElementById('fade').style.display='block'">
-			<button type="button" id="create-group-button" class="btn btn-primary"
-					style="float: right;">
-				<i class="material-icons icon" style="font-size: large;">file_upload</i>
-				上传文件
-			</button>
-		</a>
-	</div>
-	<table id="notice-list" class="table table-bordered">
-		<thead>
-			<tr style="color:Highlight">
-				<th style="width: 10%;">序号</th>
-				<th style="width: 40%;">文件名</th>
-				<th style="width: 35%;">进度</th>
-				<th style="width: 15%;">操作</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr style="color: #000000;">
-				<td>1</td>
-				<td>
-					文件名<br />
-					文件大小
-				</td>
-				<td>
-					<div class="progress progress-striped active" style="float: left; width: 80%;">
-						<div class="progress-bar progress-bar-info" role="progressbar"
-							aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-							style="width: 30%;">
-						</div>
-					</div>
-					<span><strong>&nbsp;&nbsp;&nbsp;30%</strong></span>
-				</td>
-				<td>
-					<button class="btn btn-primary" >
-						<i class="material-icons icon" style="font-size: middle;">play_arrow</i>
-						暂停 </button>
-						<!--
-						<i class="material-icons icon" style="font-size: large;">pause</i>
-						继续 </button>
-						-->
-					<button class="btn btn-danger">
-						<i class="material-icons icon" style="font-size: middle;">delete_forever</i>
-						删除</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
 	<br/>
-	<%-- <div id="uploader-container" style="width: 100%">
-	<div id="upInfo"></div>
-		<h2>大文件断点续传</h2>
-		<div id="filePicker" style="float: right;">
-			<i class="material-icons icon" style="font-size: large;">file_upload</i>
-			上传文件
-		</div>
-		<table id="notice-list"  class="upload table table-bordered">
-			<thead>
-				<tr style="color:Highlight">
-					<th style="width: 10%;">序号</th>
-					<th style="width: 40%;">文件名</th>
-					<th style="width: 35%;">进度</th>
-					<th style="width: 15%;">操作</th>
-				</tr>
-			</thead>
-			<tbody id="fileList" class="uploader-list">
-				
-			</tbody>
-		</table>
-		<input type="button" class="btnSave btn btn-success" id="btnUpload" value="上传" margin="2px" padding="3px"/>
-		<input type="button" class="btnSave btn btn-danger" id="btnReset" value="清空" margin="2px" padding="3px"/>
-	</div> --%>
+
 	<div id="uploadfile">
-	<h3>断点续传</h3>
-		<div id="picker">选择文件</div>
+		<div id="picker" style="margin-bottom:10px;float:left;">选择文件</div>
 		<!--用来存放文件信息-->
 		<div class="uploader-list">
 			<table id="thelist" class="table table-bordered" border="1" cellpadding="0" cellspacing="0" width="100%">
@@ -167,7 +100,8 @@
 				</tr>
 			</table>
 		</div>
-		<div id="ctlBtn" class="btn btn-default">开始上传</div>
+		<div id="ctlBtn" class="btn btn-info" style="float:right;">开始上传</div>
+	</div>
 	</div>
 	<script type="text/javascript">
 	$(function() {
@@ -179,6 +113,7 @@
 		$fileArray = new Array(), // 要上传的文件列表
 		$md5Array = new Array(), // 文件的MD5
 		$nameArray = new Array(), // 文件名称
+		file_count = 0,
 		count = 0, // 正在上传的文件在上传列表中的位置
 		uploader; // Web Uploader实例
 		
@@ -288,21 +223,24 @@
 
 		// 当有文件添加进来的时候 
 		uploader.on('fileQueued', function(file) {
-			alert("sorry!");
-			if((file.size <= $chunkSize) || (file.size > $maxSingleSize)){
+			if((file.size <= $chunkSize) || (file.size > $maxSingleSize) ){
 				return;
 			}
-			alert("hello!");
+			if(file.size/1000000 + ${User.getUserUsage()} > ${User.getUserStorage()}){
+				alert("storage is not enough");
+				return;
+			}
 			$list.append('<tr id="'+ file.id 
 						+ '" class="file-item">'
-						+ '<td width="5%" class="file-num">111</td>'
+						+ '<td class="file-num">'+ (++file_count) +'</td>'
 						+ '<td class="file-name">'+ file.name +'</td>'
-						+ '<td width="20%" class="file-size">'
-						+ file.size +'</td>' 
-						+ '<td width="20%" class="file-pro">0%</td>'
+						+ '<td class="file-size">'
+						+ file.size/1000000 +' M</td>' 
+						+ '<td class="file-pro">0%</td>'
 						+ '<td class="file-status">等待上传</td>'
-						+ '<td width="20%" class="file-manage">' 
+						+ '<td class="file-manage">' 
 						+ '<a class="stop-btn" href="javascript:;">暂停</a>'
+						+ '<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>'
 						+ '<a class="remove-this" href="javascript:;">取消</a>' 
 						+ '</td>'
 						+'</tr>');
@@ -332,6 +270,7 @@
 					smallFiles += name + ','
 				}
 			}
+			
 			var msg = '';
 			if(''!=smallFiles){
 				msg += "文件" + smallFiles + "小于10M,";
@@ -344,6 +283,7 @@
 				alert(msg);
 				return;
 			}
+			
 		});
 		
 		// 上传中
@@ -384,7 +324,6 @@
 		
 	});
 	</script>
-	</div>
 	<script type="text/javascript">
 	//绑定所有type=file的元素的onchange事件的处理函数
 	$(':file').change(function () {
@@ -395,33 +334,7 @@
 		var url = window.URL.createObjectURL(file); //获取本地文件的url，如果是图片文件，可用于预览图片
 		$("#info").html("文件名：" + Name + "<br/>" + " 文件类型：" + Type+ "<br/>" + " 文件大小：" + Size+ " Bytes<br/>" + " url: " + url+ "<br/>");
 	});
-	$(function(){
-		$("#upload").click(function ()
-		{
-			var formdata = new FormData($('#uploadform')[0]);
-			$.ajax({
-				type : 'POST',
-				url : '/webpan/file/upload',
-				data : formdata,
-				cache : false,
-				processData : false,
-				contentType : false,
-				xhr: function () { //获取ajaxSettings中的xhr对象，为它的upload属性绑定progress事件的处理函数
-					var myXhr = $.ajaxSettings.xhr();
-					if (myXhr.upload) { //检查upload属性是否存在
-						//绑定progress事件的回调函数
-						myXhr.upload.addEventListener('progress', progressHandlingFunction, false);
-					}
-					return myXhr; //xhr对象返回给jQuery使用
-				},
-			}).success(function(data) {
-				var result = JSON.parse(data);
-				alert("上传成功！");
-			}).error(function() {
-				alert("上传失败！");
-			});	
-		});
-	})
+
 	//上传进度回调函数：
 	function progressHandlingFunction(e) {
 		if (e.lengthComputable) {
@@ -431,5 +344,61 @@
 		}
 	}
 	</script>
+	
+	<script type="text/javascript">
+		function upload(){
+			var flag = 1;
+			var filePath=document.getElementById("location").value;
+			
+			if(filePath.length == 0){
+				alert("请先选择一个文件");
+				return;
+			}
+			
+			var lastBackslashIndex = filePath.lastIndexOf('\\');
+			var lastPointIndex = filePath.lastIndexOf('.');
+			
+			var fileName = filePath.substring(lastBackslashIndex+1,lastPointIndex);
+			var fileType = filePath.substring(lastPointIndex+1);
+			
+		    var names = new Array();
+		    var types = new Array();
+		    <c:forEach items="${fileList}" var="a"> 
+		    	names.push('${a.getFileName()}');
+		    	types.push('${a.getFileType()}');
+		    </c:forEach>
+		    
+		    for(var i=0;i<names.length;i++){
+		    	if(fileName == names[i] && fileType == types[i]){
+			    	  if(confirm("检测到文件重复，是否覆盖原来文件？")){
+			    	  }
+			    	  else{
+			    		  flag = 0;
+			    	  }
+			    	  break;
+			     }
+		    	
+		    }
+		    if(flag == 1){
+		    	var formdata = new FormData($('#uploadform')[0]);
+	              $.ajax({
+	              	type : 'POST',
+	  				url : '/webpan/file/upload',
+	  				data : formdata,
+	  				cache : false,
+	  				processData : false,
+	  				contentType : false,   	
+		           }).success(function(data) {
+		  				var result = JSON.parse(data);
+		  				alert("上传成功！");
+		  				location.reload();
+		  			}).error(function() {
+		  				alert("上传失败！");
+		  				location.reload();
+		  		});
+		    }
+		}
+	</script>
+	
 </body>
 </html>

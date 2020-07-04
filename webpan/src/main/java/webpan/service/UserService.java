@@ -16,5 +16,6 @@ public interface UserService {
 	public User GetUserbyname(String UserName);
 	public int apply(String apply, String username);
 	public int CheckName(String UserName);
+	public int CheckEmail(String UserEmail);
 	public List<File> GetFilebyid(int id);
 }

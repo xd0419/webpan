@@ -88,6 +88,33 @@ public class EncryptAndDecrypt {
 		Key des_key=kg.generateKey();
 		return des_key;
 	}
+	
+	public static String EncryptFileId(String src,String key)
+	{
+		char[] p = key.toCharArray(); // 字符串转字符数组
+        int n = p.length; // 密码长度
+        char[] c = src.toCharArray();
+        int m = c.length; // 字符串长度
+        for (int k = 0; k < m; k++) {
+            int mima = c[k] + p[k / n]; // 加密
+            c[k] = (char) mima;
+        }
+        return new String(c);
+
+	}
+	public static String DecryptFileId(String src,String key)
+	{
+
+        char[] p = key.toCharArray(); // 字符串转字符数组
+        int n = p.length; // 密码长度
+        char[] c = src.toCharArray();
+        int m = c.length; // 字符串长度
+        for (int k = 0; k < m; k++) {
+            int mima = c[k] - p[k / n]; // 解密
+            c[k] = (char) mima;
+        }
+        return new String(c);
+	}
 
 }
 
